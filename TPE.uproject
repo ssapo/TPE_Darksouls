@@ -4,6 +4,18 @@
 	"Category": "",
 	"Description": "",
 	"Enterprise": true,
+	"Modules": [
+		{
+			"Name": "TPE",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine",
+				"UMG",
+				"AIModule"
+			]
+		}
+	],
 	"Plugins": [
 		{
 			"Name": "ApexDestruction",
