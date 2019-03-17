@@ -15,13 +15,13 @@ UBTService_Detect::UBTService_Detect()
 void UBTService_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
-
+	
 	auto ControllingPawn = OwnerComp.GetAIOwner()->GetPawn();
 	if (nullptr == ControllingPawn) { return; }
 
 	auto World = ControllingPawn->GetWorld();
 	auto Center = ControllingPawn->GetActorLocation();
-	auto DetectRadius = 1000.0f;
+	auto DetectRadius = 500.0f;
 
 	if (nullptr == World) { return; }
 	
@@ -31,14 +31,14 @@ void UBTService_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 		OverlapResults,
 		Center,
 		FQuat::Identity,
-		ECollisionChannel::ECC_GameTraceChannel3,
+		ECC_GameTraceChannel2,
 		FCollisionShape::MakeSphere(DetectRadius),
 		CollisionQueryParam
 	);
 
 	DrawDebugSphere(World, Center, DetectRadius, 16, FColor::Red, false, 0.2f);
 
-	if (bResult)
+	if (0 < OverlapResults.Num())
 	{
 		for (auto OverlapResult : OverlapResults)
 		{
@@ -47,7 +47,7 @@ void UBTService_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 			if (Character && Character->GetController()->IsPlayerController())
 			{
 				OwnerComp.GetBlackboardComponent()->SetValueAsObject(ATPE_AIController::TargetKey, Character);
-				DrawDebugSphere(World, Center, DetectRadius, 16, FColor::Green, false, 0.2f);
+				DrawDebugSphere(World, Center, DetectRadius, 16, FColor::Green, false, 0.4f);
 
 				DrawDebugPoint(World, Character->GetActorLocation(), 10.0f, FColor::Blue, false, 0.2f);
 				DrawDebugLine(World, ControllingPawn->GetActorLocation(), Character->GetActorLocation(), FColor::Blue, false, 2.0f);

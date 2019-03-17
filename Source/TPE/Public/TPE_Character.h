@@ -34,6 +34,9 @@ public:
 	void AttackEnd();
 	virtual void AttackEnd_Implementation() override;
 
+	UFUNCTION()
+	void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

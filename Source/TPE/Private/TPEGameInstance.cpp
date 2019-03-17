@@ -10,7 +10,7 @@ UTPEGameInstance::UTPEGameInstance()
 	TPE_CHECK(DT_TPECHARACTER.Succeeded());
 
 	TPECharacterTable = DT_TPECHARACTER.Object;
-	TPE_CHECK(TPECharacterTable->RowMap.Num() > 0);
+	TPE_CHECK(TPECharacterTable->GetRowMap().Num() > 0);
 }
 
 void UTPEGameInstance::Init()

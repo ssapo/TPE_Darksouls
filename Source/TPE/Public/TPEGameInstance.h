@@ -48,7 +48,7 @@ class TPE_API UTPEGameInstance : public UGameInstance
 	
 public:
 	UTPEGameInstance();
-	
+
 	virtual void Init() override;
 
 	FTPECharacterData* GetTPEChacracterData(int32 Level);

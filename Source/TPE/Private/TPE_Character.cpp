@@ -30,11 +30,17 @@ ATPE_Character::ATPE_Character()
 
 	AIControllerClass = ATPE_AIController::StaticClass();
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+
+	CharacterStat->SetNewLevel(1);
 }
 
 void ATPE_Character::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
+	TPE_Anim = Cast<UTPE_AnimInstance>(GetMesh()->GetAnimInstance());
+	TPE_CHECK(nullptr != TPE_Anim);
+
+	TPE_Anim->OnMontageEnded.AddDynamic(this, &ATPE_Character::OnAttackMontageEnded);
 
 	CharacterStat->OnHPIsZero.AddLambda([this]() -> void {
 		TPE_LOG(Warning, "OHHPIsZero");
@@ -42,20 +48,18 @@ void ATPE_Character::PostInitializeComponents()
 
 		SetActorEnableCollision(false);
 	});
-
-	auto CharacterWidget = Cast<UTPE_CharacterWidget>(HPBarWidget->GetUserWidgetObject());
-	if (nullptr != CharacterWidget)
-	{
-		CharacterWidget->BindCharacterStat(CharacterStat);
-	}
-
 }
 
 // Called when the game starts or when spawned
 void ATPE_Character::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	auto CharacterWidget = Cast<UTPE_CharacterWidget>(HPBarWidget->GetUserWidgetObject());
+	if (nullptr != CharacterWidget)
+	{
+		CharacterWidget->BindCharacterStat(CharacterStat);
+	}
 }
 
 // Called every frame
@@ -68,7 +72,7 @@ void ATPE_Character::Tick(float DeltaTime)
 float ATPE_Character::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
 {
 	float FinalDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-	TPE_LOG(Warning, "Actor : %s took Damage", *GetName(), FinalDamage);
+	TPE_LOG(Warning, "Actor : %s took Damage %f", *GetName(), FinalDamage);
 
 	CharacterStat->SetDamage(FinalDamage);
 	return FinalDamage;
@@ -80,7 +84,13 @@ void ATPE_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
+void ATPE_Character::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted)
+{
+	AttackEnd_Implementation();
+}
+
 void ATPE_Character::AttackEnd_Implementation()
 {
 	OnAttackEnd.Broadcast();
+	OnAttackEnd.Clear();
 }

@@ -9,12 +9,7 @@ void UTPE_CharacterWidget::BindCharacterStat(UTPECharacterStatComponent* NewChar
 	TPE_CHECK(nullptr != NewCharacterStat);
 
 	CurrentCharacterStat = NewCharacterStat;
-	NewCharacterStat->OnHPChanged.AddLambda([this]() -> void {
-		if (CurrentCharacterStat.IsValid())
-		{
-			TPE_LOG(Warning, "HPRatio : %f", CurrentCharacterStat->GetHPRatio());
-		}
-	});
+	NewCharacterStat->OnHPChanged.AddUObject(this, &UTPE_CharacterWidget::UpdateHPWidget);
 }
 
 void UTPE_CharacterWidget::NativeConstruct()
