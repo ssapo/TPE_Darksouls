@@ -31,7 +31,19 @@ ATPE_Character::ATPE_Character()
 	AIControllerClass = ATPE_AIController::StaticClass();
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 
-	CharacterStat->SetNewLevel(1);
+	Dead = false;
+}
+
+// Called every frame
+void ATPE_Character::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+}
+
+// Called to bind functionality to input
+void ATPE_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
 void ATPE_Character::PostInitializeComponents()
@@ -44,11 +56,30 @@ void ATPE_Character::PostInitializeComponents()
 
 	CharacterStat->OnHPIsZero.AddLambda([this]() -> void {
 		TPE_LOG(Warning, "OHHPIsZero");
-		TPE_Anim->SetDeadAnim();
-
-		SetActorEnableCollision(false);
+		Die();
 	});
 }
+
+float ATPE_Character::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
+{
+	float FinalDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	TPE_LOG(Warning, "Actor : %s took Damage %f", *GetName(), FinalDamage);
+
+	CharacterStat->SetDamage(FinalDamage);
+	return FinalDamage;
+}
+
+void ATPE_Character::AttackEnd_Implementation()
+{
+	OnAttackEnd.Broadcast();
+	OnAttackEnd.Clear();
+}
+
+void ATPE_Character::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted)
+{
+	AttackEnd_Implementation();
+}
+
 
 // Called when the game starts or when spawned
 void ATPE_Character::BeginPlay()
@@ -62,35 +93,12 @@ void ATPE_Character::BeginPlay()
 	}
 }
 
-// Called every frame
-void ATPE_Character::Tick(float DeltaTime)
+void ATPE_Character::Die()
 {
-	Super::Tick(DeltaTime);
+	TPE_CHECK(nullptr != TPE_Anim)
 
-}
+	Dead = true;
+	TPE_Anim->SetDeadAnim();
 
-float ATPE_Character::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
-{
-	float FinalDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-	TPE_LOG(Warning, "Actor : %s took Damage %f", *GetName(), FinalDamage);
-
-	CharacterStat->SetDamage(FinalDamage);
-	return FinalDamage;
-}
-
-// Called to bind functionality to input
-void ATPE_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-}
-
-void ATPE_Character::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted)
-{
-	AttackEnd_Implementation();
-}
-
-void ATPE_Character::AttackEnd_Implementation()
-{
-	OnAttackEnd.Broadcast();
-	OnAttackEnd.Clear();
+	SetActorEnableCollision(false);
 }

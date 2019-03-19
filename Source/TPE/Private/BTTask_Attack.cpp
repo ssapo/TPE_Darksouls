@@ -16,8 +16,7 @@ EBTNodeResult::Type UBTTask_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 	EBTNodeResult::Type Result = Super::ExecuteTask(OwnerComp, NodeMemory);
 
 	auto Character = Cast<ATPE_Character>(OwnerComp.GetAIOwner()->GetPawn());
-	if (nullptr == Character)
-		return EBTNodeResult::Failed;
+	if (nullptr == Character || true == Character->IsDead()) { return EBTNodeResult::Failed; }
 
 	Character->Attack();
 	IsAttacking = true;
@@ -31,10 +30,7 @@ EBTNodeResult::Type UBTTask_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 void UBTTask_Attack::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
 	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
-	if (!IsAttacking)
-	{
-		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
-	}
+	if (!IsAttacking) { FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded); }
 }
 
 

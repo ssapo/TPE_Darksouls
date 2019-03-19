@@ -41,6 +41,13 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+public:
+	UFUNCTION()
+	virtual void Die();
+
+	UFUNCTION()
+	bool IsDead() const { return Dead; }
+
 private:
 
 	UPROPERTY(VisibleAnywhere, Category = Stat)
@@ -52,4 +59,5 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = UI)
 	class UWidgetComponent* HPBarWidget;
 
+	bool Dead;
 };
