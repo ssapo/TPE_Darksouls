@@ -6,6 +6,7 @@
 #include "Components/WidgetCOmponent.h"
 #include "TPE_CharacterWidget.h"
 #include "TPE_AIController.h"
+#include "TPE_Weapon.h"
 
 // Sets default values
 ATPE_Character::ATPE_Character()
@@ -30,7 +31,7 @@ ATPE_Character::ATPE_Character()
 
 	AIControllerClass = ATPE_AIController::StaticClass();
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
-
+	 
 	Dead = false;
 }
 
@@ -55,7 +56,7 @@ void ATPE_Character::PostInitializeComponents()
 	TPE_Anim->OnMontageEnded.AddDynamic(this, &ATPE_Character::OnAttackMontageEnded);
 
 	CharacterStat->OnHPIsZero.AddLambda([this]() -> void {
-		TPE_LOG(Warning, "OHHPIsZero");
+		TPE_LOG(Warning, TEXT("OHHPIsZero"));
 		Die();
 	});
 }
@@ -63,7 +64,7 @@ void ATPE_Character::PostInitializeComponents()
 float ATPE_Character::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
 {
 	float FinalDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-	TPE_LOG(Warning, "Actor : %s took Damage %f", *GetName(), FinalDamage);
+	TPE_LOG(Warning, TEXT("Actor : %s took Damage %f"), *GetName(), FinalDamage);
 
 	CharacterStat->SetDamage(FinalDamage);
 	return FinalDamage;
@@ -91,6 +92,9 @@ void ATPE_Character::BeginPlay()
 	{
 		CharacterWidget->BindCharacterStat(CharacterStat);
 	}
+
+	//UWorld::SpawnActor<ATPE_Weapon>()
+
 }
 
 void ATPE_Character::Die()
@@ -100,5 +104,23 @@ void ATPE_Character::Die()
 	Dead = true;
 	TPE_Anim->SetDeadAnim();
 
+	HPBarWidget->SetVisibility(false);
 	SetActorEnableCollision(false);
+}
+
+void ATPE_Character::EquipWeapon(FName SocketName, ATPE_Weapon* Weapon)
+{
+	AttachToActor(Weapon, FAttachmentTransformRules(EAttachmentRule::KeepRelative, true), SocketName);
+
+	Weapon->SetWeaponOwner(this);
+}
+
+void ATPE_Character::RightEquipWeapon(ATPE_Weapon* Weapon)
+{
+	EquipWeapon("socket_ik_hand_r", Weapon);
+}
+
+void ATPE_Character::LeftEquipWeapon(ATPE_Weapon* Weapon)
+{
+	EquipWeapon("socket_ik_hand_l", Weapon);
 }

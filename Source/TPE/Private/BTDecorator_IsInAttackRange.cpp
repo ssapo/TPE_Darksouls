@@ -22,6 +22,9 @@ bool UBTDecorator_IsInAttackRange::CalculateRawConditionValue(UBehaviorTreeCompo
 	auto Target = Cast<ATPE_Character>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(ATPE_AIController::TargetKey));
 	if (nullptr == Target) { return false; }
 
-	bResult = (Target->GetDistanceTo(ControllingCharacter) <= 200.0f);
+	auto Dist = Target->GetDistanceTo(ControllingCharacter);
+	TPE_PRINT(FColor::Emerald, TEXT("distance: %f"), Dist);
+
+	bResult = (Dist <= 200.0f);
 	return bResult;
 }

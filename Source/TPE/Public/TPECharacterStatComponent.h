@@ -25,14 +25,19 @@ protected:
 	virtual void InitializeComponent() override;
 
 public:
+	UFUNCTION(BlueprintCallable, Category = Stat)
 	void SetNewLevel(int32 NewLevel);
 
+	UFUNCTION(BlueprintCallable, Category = Stat)
 	void SetDamage(int32 NewDamage);
 
+	UFUNCTION(BlueprintCallable, Category = Stat)
 	void SetHP(float NewHP);
 
+	UFUNCTION(BlueprintCallable, Category = Stat)
 	float GetAttack() const;
 
+	UFUNCTION(BlueprintCallable, Category = Stat)
 	float GetHPRatio() const;
 
 

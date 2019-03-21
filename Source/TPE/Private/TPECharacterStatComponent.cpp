@@ -40,7 +40,7 @@ void UTPECharacterStatComponent::SetNewLevel(int32 NewLevel)
 	}
 	else
 	{
-		TPE_LOG(Error, "Level (%d) data doesn't exist", NewLevel);
+		TPE_LOG(Error, TEXT("Level (%d) data doesn't exist"), NewLevel);
 	}
 }
 

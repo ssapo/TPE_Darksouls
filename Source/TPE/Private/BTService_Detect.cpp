@@ -16,12 +16,12 @@ void UBTService_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 {
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 	
-	auto ControllingPawn = OwnerComp.GetAIOwner()->GetPawn();
-	if (nullptr == ControllingPawn) { return; }
+	auto ControllingPawn = Cast<ATPE_Character>(OwnerComp.GetAIOwner()->GetPawn());
+	if (nullptr == ControllingPawn || true == ControllingPawn->IsDead()) { return;}
 
 	auto World = ControllingPawn->GetWorld();
 	auto Center = ControllingPawn->GetActorLocation();
-	auto DetectRadius = 500.0f;
+	auto DetectRadius = 800.0f;
 
 	if (nullptr == World) { return; }
 	
@@ -55,9 +55,5 @@ void UBTService_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 				return;
 			}
 		}
-	}
-	else
-	{
-		OwnerComp.GetBlackboardComponent()->SetValueAsObject(ATPE_AIController::TargetKey, nullptr);
 	}
 }

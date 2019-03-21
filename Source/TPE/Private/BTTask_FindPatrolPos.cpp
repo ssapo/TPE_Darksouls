@@ -4,6 +4,7 @@
 #include "TPE_AIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "NavigationSystem.h"
+#include "TPE_Character.h"
 
 UBTTask_FindPatrolPos::UBTTask_FindPatrolPos()
 {
@@ -14,8 +15,8 @@ EBTNodeResult::Type UBTTask_FindPatrolPos::ExecuteTask(UBehaviorTreeComponent& O
 {
 	EBTNodeResult::Type Result = Super::ExecuteTask(OwnerComp, NodeMemory);
 
-	auto ControllingPawn = OwnerComp.GetAIOwner()->GetPawn();
-	if (nullptr == ControllingPawn) { return EBTNodeResult::Failed; }
+	auto ControllingPawn = Cast<ATPE_Character>(OwnerComp.GetAIOwner()->GetPawn());
+	if (nullptr == ControllingPawn || true == ControllingPawn->IsDead() ) { return EBTNodeResult::Failed; }
 
 	auto NavSystem = UNavigationSystemV1::GetNavigationSystem(ControllingPawn->GetWorld());
 	if (nullptr == NavSystem) { return EBTNodeResult::Failed; }

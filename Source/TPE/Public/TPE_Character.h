@@ -7,7 +7,6 @@
 #include "TPE_Attack.h"
 #include "TPE_Character.generated.h"
 
-
 UCLASS(BlueprintType)
 class TPE_API ATPE_Character : public ACharacter, public ITPE_Attack
 {
@@ -46,10 +45,19 @@ public:
 	virtual void Die();
 
 	UFUNCTION()
+	virtual void EquipWeapon(FName SocketName, class ATPE_Weapon* Weapon);
+
+	UFUNCTION()
 	bool IsDead() const { return Dead; }
 
-private:
+protected:
+	UFUNCTION()
+	virtual void RightEquipWeapon(class ATPE_Weapon* Weapon);
 
+	UFUNCTION()
+	virtual void LeftEquipWeapon(class ATPE_Weapon* Weapon);
+
+private:
 	UPROPERTY(VisibleAnywhere, Category = Stat)
 	class UTPECharacterStatComponent* CharacterStat;
 	
@@ -58,6 +66,12 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = UI)
 	class UWidgetComponent* HPBarWidget;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equip", Meta = (AllowPrivateAccess = true))
+	class ATPE_Weapon* RightWeapon;
 
-	bool Dead;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equip", Meta = (AllowPrivateAccess = true))
+	class ATPE_Weapon* LeftWeapon;
+
+	bool Dead = false;
 };

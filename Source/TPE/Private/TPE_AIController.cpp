@@ -26,7 +26,7 @@ void ATPE_AIController::Possess(APawn* InPawn)
 		Blackboard->SetValueAsVector(HomePosKey, InPawn->GetActorLocation());
 		if (!RunBehaviorTree(BTAsset))
 		{
-			TPE_LOG(Error, "AIController couldn't run behavior tree!");
+			TPE_LOG(Error, TEXT("AIController couldn't run behavior tree!"));
 		}
 	}
 }
