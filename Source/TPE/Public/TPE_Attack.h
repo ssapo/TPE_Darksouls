@@ -6,7 +6,7 @@
 #include "UObject/Interface.h"
 #include "TPE_Attack.generated.h"
 
-DECLARE_MULTICAST_DELEGATE(FOnAttackEndDelegate);
+//DECLARE_MULTICAST_DELEGATE(FOnAttackEndDelegate);
 
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
@@ -24,11 +24,7 @@ class TPE_API ITPE_Attack
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Attack")
-	void Attack();
+	//virtual void Attack() = 0;
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Attack")
-	void AttackEnd();
-
-	FOnAttackEndDelegate OnAttackEnd;
+	//FOnAttackEndDelegate OnAttackEnd;
 };

@@ -55,6 +55,7 @@ void ATPE_Character::PostInitializeComponents()
 
 	TPE_Anim->OnMontageEnded.AddDynamic(this, &ATPE_Character::OnAttackMontageEnded);
 
+	CharacterStat->SetNewLevel(IsPlayerControlled() ? 10 : 1);
 	CharacterStat->OnHPIsZero.AddLambda([this]() -> void {
 		TPE_LOG(Warning, TEXT("OHHPIsZero"));
 		Die();
@@ -70,17 +71,11 @@ float ATPE_Character::TakeDamage(float DamageAmount, struct FDamageEvent const& 
 	return FinalDamage;
 }
 
-void ATPE_Character::AttackEnd_Implementation()
+void ATPE_Character::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 {
 	OnAttackEnd.Broadcast();
 	OnAttackEnd.Clear();
 }
-
-void ATPE_Character::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted)
-{
-	AttackEnd_Implementation();
-}
-
 
 // Called when the game starts or when spawned
 void ATPE_Character::BeginPlay()
@@ -93,8 +88,17 @@ void ATPE_Character::BeginPlay()
 		CharacterWidget->BindCharacterStat(CharacterStat);
 	}
 
-	//UWorld::SpawnActor<ATPE_Weapon>()
+	//ATPECharacter
+	return;
+	auto NewRightWeapon = GetWorld()->SpawnActor<ATPE_Weapon>(ATPE_Weapon::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+	
+	TPE_CHECK(nullptr != NewRightWeapon);
+	RightEquipWeapon(NewRightWeapon);
 
+	auto NewLeftWeapon = GetWorld()->SpawnActor<ATPE_Weapon>(ATPE_Weapon::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+	
+	TPE_CHECK(nullptr != NewLeftWeapon);
+	LeftEquipWeapon(NewLeftWeapon);
 }
 
 void ATPE_Character::Die()
@@ -111,16 +115,19 @@ void ATPE_Character::Die()
 void ATPE_Character::EquipWeapon(FName SocketName, ATPE_Weapon* Weapon)
 {
 	AttachToActor(Weapon, FAttachmentTransformRules(EAttachmentRule::KeepRelative, true), SocketName);
-
 	Weapon->SetWeaponOwner(this);
 }
 
 void ATPE_Character::RightEquipWeapon(ATPE_Weapon* Weapon)
 {
+	TPE_PRINT(FColor::Red, TEXT("RightEquipWeapon"));
 	EquipWeapon("socket_ik_hand_r", Weapon);
+	RightWeapon = Weapon;
 }
 
 void ATPE_Character::LeftEquipWeapon(ATPE_Weapon* Weapon)
 {
+	TPE_PRINT(FColor::Red, TEXT("LeftEquipWeapon"));
 	EquipWeapon("socket_ik_hand_l", Weapon);
+	LeftWeapon = Weapon;
 }

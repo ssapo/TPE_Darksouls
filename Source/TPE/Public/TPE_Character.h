@@ -7,8 +7,11 @@
 #include "TPE_Attack.h"
 #include "TPE_Character.generated.h"
 
+DECLARE_MULTICAST_DELEGATE(FOnAttackEndDelegate);
+
+
 UCLASS(BlueprintType)
-class TPE_API ATPE_Character : public ACharacter, public ITPE_Attack
+class TPE_API ATPE_Character : public ACharacter
 {
 	GENERATED_BODY()
 
@@ -26,13 +29,6 @@ public:
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Attack")
-	void Attack();
-
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Attack")
-	void AttackEnd();
-	virtual void AttackEnd_Implementation() override;
-
 	UFUNCTION()
 	void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
 
@@ -49,6 +45,11 @@ public:
 
 	UFUNCTION()
 	bool IsDead() const { return Dead; }
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Attack")
+	void Attack();
+
+	FOnAttackEndDelegate OnAttackEnd;
 
 protected:
 	UFUNCTION()
