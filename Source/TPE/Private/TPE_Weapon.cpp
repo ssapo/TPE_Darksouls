@@ -79,15 +79,10 @@ void ATPE_Weapon::OverlapBegin_Implementation(UPrimitiveComponent* OverlappedCom
 		|| (true == OtherActor->IsA(ATPE_Actor::StaticClass()) && false == OtherActor->IsA(ATPE_Weapon::StaticClass()))
 		)
 	{
-		auto Instigator = GetInstigatorController();
-		if (nullptr != Instigator)
-		{
-			if (false == OtherActor->bCanBeDamaged) { return; }
-			
-			OtherActor->TakeDamage(30.0f, FDamageEvent(), Instigator, this);
+		if (false == OtherActor->bCanBeDamaged) { return; }
 
-			OtherActor->bCanBeDamaged = false;
-		}
+		OtherActor->TakeDamage(30.0f, FDamageEvent(), WeaponOwner->GetController(), this);
+		OtherActor->bCanBeDamaged = false;
 	}
 }
 
@@ -100,7 +95,7 @@ void ATPE_Weapon::OverlapEnd_Implementation(UPrimitiveComponent* OverlappedCompo
 		FTimerHandle UnusedHandle;
 		GetWorld()->GetTimerManager().SetTimer(UnusedHandle, [=]() {
 			OtherActor->bCanBeDamaged = true;
-		}, false, AttackDelayTime);
+		}, AttackDelayTime, false);
 	}
 }
 
