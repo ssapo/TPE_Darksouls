@@ -3,7 +3,6 @@
 #include "BTTask_Attack.h"
 #include "TPE_AIController.h"
 #include "TPE_Character.h"
-#include "TPE_Attack.h"
 
 UBTTask_Attack::UBTTask_Attack()
 {

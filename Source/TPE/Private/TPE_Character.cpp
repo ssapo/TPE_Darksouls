@@ -11,9 +11,6 @@
 // Sets default values
 ATPE_Character::ATPE_Character()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-
 	CharacterStat = CreateDefaultSubobject<UTPECharacterStatComponent>(TEXT("CHARACTERSTAT"));
 	HPBarWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("HPBARWIDGET"));
 
@@ -33,12 +30,6 @@ ATPE_Character::ATPE_Character()
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 	 
 	Dead = false;
-}
-
-// Called every frame
-void ATPE_Character::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
 }
 
 // Called to bind functionality to input

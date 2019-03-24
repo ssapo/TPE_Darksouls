@@ -4,11 +4,9 @@
 
 #include "TPE.h"
 #include "GameFramework/Character.h"
-#include "TPE_Attack.h"
 #include "TPE_Character.generated.h"
 
 DECLARE_MULTICAST_DELEGATE(FOnAttackEndDelegate);
-
 
 UCLASS(BlueprintType)
 class TPE_API ATPE_Character : public ACharacter
@@ -19,9 +17,6 @@ public:
 	// Sets default values for this character's properties
 	ATPE_Character();
 
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
@@ -30,7 +25,7 @@ public:
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
 	UFUNCTION()
-	void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
+	void OnAttackMontageEnded(class UAnimMontage* Montage, bool bInterrupted);
 
 protected:
 	// Called when the game starts or when spawned
@@ -41,7 +36,7 @@ public:
 	virtual void Die();
 
 	UFUNCTION()
-	virtual void EquipWeapon(FName SocketName, class ATPE_Weapon* Weapon);
+	virtual void EquipWeapon(FName SocketName, class ATPE_Weapon* NewWeapon);
 
 	UFUNCTION()
 	bool IsDead() const { return Dead; }
