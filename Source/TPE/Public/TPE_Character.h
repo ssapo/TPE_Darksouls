@@ -32,14 +32,14 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-	UFUNCTION()
-	virtual void Die();
+	UFUNCTION(BlueprintCallable, Category = "Status")
+	void Die();
+
+	UFUNCTION(BlueprintCallable, Category = "Status")
+	bool IsDead() const { return bDead; }
 
 	UFUNCTION()
 	virtual void EquipWeapon(FName SocketName, class ATPE_Weapon* NewWeapon);
-
-	UFUNCTION()
-	bool IsDead() const { return Dead; }
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Attack")
 	void Attack();
@@ -69,5 +69,5 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equip", Meta = (AllowPrivateAccess = true))
 	class ATPE_Weapon* LeftWeapon;
 
-	bool Dead = false;
+	bool bDead = false;
 };

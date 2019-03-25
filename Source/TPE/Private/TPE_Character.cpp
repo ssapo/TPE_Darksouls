@@ -29,7 +29,7 @@ ATPE_Character::ATPE_Character()
 	AIControllerClass = ATPE_AIController::StaticClass();
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 	 
-	Dead = false;
+	bDead = false;
 }
 
 // Called to bind functionality to input
@@ -47,10 +47,7 @@ void ATPE_Character::PostInitializeComponents()
 	TPE_Anim->OnMontageEnded.AddDynamic(this, &ATPE_Character::OnAttackMontageEnded);
 
 	CharacterStat->SetNewLevel(IsPlayerControlled() ? 10 : 1);
-	CharacterStat->OnHPIsZero.AddLambda([this]() -> void {
-		TPE_LOG(Warning, TEXT("OHHPIsZero"));
-		Die();
-	});
+	CharacterStat->OnHPIsZero.AddUObject(this, &ATPE_Character::Die);
 }
 
 float ATPE_Character::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
@@ -96,7 +93,7 @@ void ATPE_Character::Die()
 {
 	TPE_CHECK(nullptr != TPE_Anim)
 
-	Dead = true;
+	bDead = true;
 	TPE_Anim->SetDeadAnim();
 
 	HPBarWidget->SetVisibility(false);
