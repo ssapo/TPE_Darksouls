@@ -19,6 +19,7 @@ public:
 	FTPECharacterData() 
 		: Level(1)
 		, MaxHP(100.0f)
+		, MaxStamina(100.0f)
 		, Attack(10.0f)
 		, DropExp(10)
 		, NextExp(30)
@@ -31,8 +32,11 @@ public:
 	float MaxHP;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	float MaxStamina;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
 	float Attack;
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
 	int32 DropExp;
 

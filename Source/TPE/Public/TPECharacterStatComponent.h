@@ -8,6 +8,9 @@
 
 DECLARE_MULTICAST_DELEGATE(FOnHPIsZeroDelegate)
 DECLARE_MULTICAST_DELEGATE(FOnHPChangedDelegate)
+DECLARE_MULTICAST_DELEGATE(FOnStaminaZeroDelegate)
+DECLARE_MULTICAST_DELEGATE(FOnStaminaChangedDelegate)
+
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class TPE_API UTPECharacterStatComponent : public UActorComponent
@@ -27,7 +30,7 @@ protected:
 public:
 	UFUNCTION(BlueprintCallable, Category = Stat)
 	void SetNewLevel(int32 NewLevel);
-
+	
 	UFUNCTION(BlueprintCallable, Category = Stat)
 	void SetDamage(int32 NewDamage);
 
@@ -35,16 +38,25 @@ public:
 	void SetHP(float NewHP);
 
 	UFUNCTION(BlueprintCallable, Category = Stat)
+	void SetStamina(float NewStamina);
+
+	UFUNCTION(BlueprintCallable, Category = Stat)
 	float GetAttack() const;
 
 	UFUNCTION(BlueprintCallable, Category = Stat)
 	float GetHPRatio() const;
 
+	UFUNCTION(BlueprintCallable, Category = Stat)
+	float GetStaminaRatio() const;
 
 public:
 	FOnHPIsZeroDelegate OnHPIsZero;
 
 	FOnHPChangedDelegate OnHPChanged;
+
+	FOnStaminaZeroDelegate OnStaminaIsZero;
+
+	FOnStaminaChangedDelegate OnStaminaChanged;
 
 private:	
 	struct FTPECharacterData* CurrentStatData = nullptr;
@@ -55,4 +67,6 @@ private:
 	UPROPERTY(Transient, VisibleInstanceOnly, Category = Stat, Meta = (AllowPrivateAccess = true))
 	float CurrentHP;
 	
+	UPROPERTY(Transient, VisibleInstanceOnly, Category = Stat, Meta = (AllowPrivateAccess = true))
+	float CurrentStamina;
 };

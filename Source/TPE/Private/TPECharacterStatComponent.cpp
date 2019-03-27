@@ -37,6 +37,7 @@ void UTPECharacterStatComponent::SetNewLevel(int32 NewLevel)
 	{
 		Level = NewLevel;
 		SetHP(CurrentStatData->MaxHP);
+		SetStamina(CurrentStatData->MaxStamina);
 	}
 	else
 	{
@@ -61,6 +62,17 @@ void UTPECharacterStatComponent::SetHP(float NewHP)
 	}
 }
 
+void UTPECharacterStatComponent::SetStamina(float NewStamina)
+{
+	CurrentStamina = NewStamina;
+	OnStaminaChanged.Broadcast();
+	if (CurrentStamina < KINDA_SMALL_NUMBER)
+	{
+		CurrentStamina = 0.0f;
+		OnStaminaIsZero.Broadcast();
+	}
+}
+
 float UTPECharacterStatComponent::GetAttack() const
 {
 	TPE_CHECK(nullptr != CurrentStatData, 0.0f);
@@ -71,5 +83,10 @@ float UTPECharacterStatComponent::GetHPRatio() const
 {
 	TPE_CHECK(nullptr != CurrentStatData, 0.0f);
 	return (CurrentStatData->MaxHP < KINDA_SMALL_NUMBER) ? 0.0f : (CurrentHP / CurrentStatData->MaxHP);
+}
 
+float UTPECharacterStatComponent::GetStaminaRatio() const
+{
+	TPE_CHECK(nullptr != CurrentStatData, 0.0f);
+	return (CurrentStatData->MaxStamina < KINDA_SMALL_NUMBER) ? 0.0f : (CurrentStamina / CurrentStatData->MaxStamina);
 }

@@ -3,7 +3,7 @@
 #include "TPE_Character.h"
 #include "TPECharacterStatComponent.h"
 #include "TPE_AnimInstance.h"
-#include "Components/WidgetCOmponent.h"
+#include "Components/WidgetComponent.h"
 #include "TPE_CharacterWidget.h"
 #include "TPE_AIController.h"
 #include "TPE_Weapon.h"
@@ -12,23 +12,24 @@
 ATPE_Character::ATPE_Character()
 {
 	CharacterStat = CreateDefaultSubobject<UTPECharacterStatComponent>(TEXT("CHARACTERSTAT"));
-	HPBarWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("HPBARWIDGET"));
+	StatBarWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("STATBARWIDGET"));
 
-	HPBarWidget->SetupAttachment(GetMesh());
+	//PlayerWidget->SetupAttachment()
+	StatBarWidget->SetupAttachment(GetMesh());
 
-	HPBarWidget->SetRelativeLocation(FVector(0.0f, 0.0f, 180.0f));
-	HPBarWidget->SetWidgetSpace(EWidgetSpace::Screen);
-	static ConstructorHelpers::FClassFinder<UUserWidget> UI_HUD(TEXT("/Game/TPE/Blueprints/UI/UI_HPBar.UI_HPBar_C"));
+	StatBarWidget->SetRelativeLocation(FVector(0.0f, 0.0f, 100.0f));
+	StatBarWidget->SetWidgetSpace(EWidgetSpace::Screen);
+	static ConstructorHelpers::FClassFinder<UUserWidget> UI_STAT(TEXT("/Game/TPE/Blueprints/UI/UI_StatBar.UI_StatBar_C"));
 
-	if (UI_HUD.Succeeded())
+	if (UI_STAT.Succeeded())
 	{
-		HPBarWidget->SetWidgetClass(UI_HUD.Class);
-		HPBarWidget->SetDrawSize(FVector2D(150.f, 50.0f));
+		StatBarWidget->SetWidgetClass(UI_STAT.Class);
+		StatBarWidget->SetDrawSize(FVector2D(100.f, 20.0f));
 	}
 
 	AIControllerClass = ATPE_AIController::StaticClass();
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
-	 
+	
 	bDead = false;
 }
 
@@ -70,7 +71,7 @@ void ATPE_Character::BeginPlay()
 {
 	Super::BeginPlay();
 
-	auto CharacterWidget = Cast<UTPE_CharacterWidget>(HPBarWidget->GetUserWidgetObject());
+	auto CharacterWidget = Cast<UTPE_CharacterWidget>(StatBarWidget->GetUserWidgetObject());
 	if (nullptr != CharacterWidget)
 	{
 		CharacterWidget->BindCharacterStat(CharacterStat);
@@ -96,8 +97,13 @@ void ATPE_Character::Die()
 	bDead = true;
 	TPE_Anim->SetDeadAnim();
 
-	HPBarWidget->SetVisibility(false);
+	StatBarWidget->SetVisibility(false);
 	SetActorEnableCollision(false);
+}
+
+void ATPE_Character::SetStatbarWidgetVisibility(bool bFlag)
+{
+	StatBarWidget->SetVisibility(bFlag);
 }
 
 void ATPE_Character::EquipWeapon(FName SocketName, ATPE_Weapon* Weapon)

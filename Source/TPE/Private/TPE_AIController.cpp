@@ -4,6 +4,7 @@
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardData.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "TPE_Character.h"
 
 const FName ATPE_AIController::HomePosKey(TEXT("HomePos"));
 const FName ATPE_AIController::PatrolPosKey(TEXT("PatrolPos"));
@@ -21,6 +22,13 @@ ATPE_AIController::ATPE_AIController()
 void ATPE_AIController::Possess(APawn* InPawn)
 {
 	Super::Possess(InPawn);
+
+	auto Character = Cast<ATPE_Character>(InPawn);
+	if (nullptr != Character)
+	{
+		Character->SetStatbarWidgetVisibility(true);
+	}
+
 	if (UseBlackboard(BBAsset, Blackboard))
 	{
 		Blackboard->SetValueAsVector(HomePosKey, InPawn->GetActorLocation());

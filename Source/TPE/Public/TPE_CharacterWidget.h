@@ -22,10 +22,14 @@ protected:
 
 	void UpdateHPWidget();
 
+	void UpdateStaminaWidget();
+
 private:
 	TWeakObjectPtr<class UTPECharacterStatComponent> CurrentCharacterStat;
 	
 	UPROPERTY()
 	class UProgressBar* HPProgressBar;
 	
+	UPROPERTY()
+	class UProgressBar* StaminaProgressBar;
 };

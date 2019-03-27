@@ -10,6 +10,7 @@ void UTPE_CharacterWidget::BindCharacterStat(UTPECharacterStatComponent* NewChar
 
 	CurrentCharacterStat = NewCharacterStat;
 	NewCharacterStat->OnHPChanged.AddUObject(this, &UTPE_CharacterWidget::UpdateHPWidget);
+	NewCharacterStat->OnStaminaChanged.AddUObject(this, &UTPE_CharacterWidget::UpdateStaminaWidget);
 }
 
 void UTPE_CharacterWidget::NativeConstruct()
@@ -18,6 +19,9 @@ void UTPE_CharacterWidget::NativeConstruct()
 
 	HPProgressBar = Cast<UProgressBar>(GetWidgetFromName(TEXT("PB_HPBar")));
 	TPE_CHECK(nullptr != HPProgressBar);
+
+	StaminaProgressBar = Cast<UProgressBar>(GetWidgetFromName(TEXT("PB_StaminaBar")));
+	TPE_CHECK(nullptr != StaminaProgressBar);
 	UpdateHPWidget();
 }
 
@@ -28,6 +32,17 @@ void UTPE_CharacterWidget::UpdateHPWidget()
 		if (nullptr != HPProgressBar)
 		{
 			HPProgressBar->SetPercent(CurrentCharacterStat->GetHPRatio());
+		}
+	}
+}
+
+void UTPE_CharacterWidget::UpdateStaminaWidget()
+{
+	if (CurrentCharacterStat.IsValid())
+	{
+		if (nullptr != StaminaProgressBar)
+		{
+			StaminaProgressBar->SetPercent(CurrentCharacterStat->GetStaminaRatio());
 		}
 	}
 }

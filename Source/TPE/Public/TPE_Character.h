@@ -39,11 +39,13 @@ public:
 	bool IsDead() const { return bDead; }
 
 	UFUNCTION()
+	void SetStatbarWidgetVisibility(bool bFlag);
+
+	UFUNCTION()
 	virtual void EquipWeapon(FName SocketName, class ATPE_Weapon* NewWeapon);
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Attack")
 	void Attack();
-
 	FOnAttackEndDelegate OnAttackEnd;
 
 protected:
@@ -61,7 +63,7 @@ private:
 	class UTPE_AnimInstance* TPE_Anim;
 
 	UPROPERTY(VisibleAnywhere, Category = UI)
-	class UWidgetComponent* HPBarWidget;
+	class UWidgetComponent* StatBarWidget;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equip", Meta = (AllowPrivateAccess = true))
 	class ATPE_Weapon* RightWeapon;
