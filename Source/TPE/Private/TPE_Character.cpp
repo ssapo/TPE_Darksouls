@@ -16,15 +16,16 @@ ATPE_Character::ATPE_Character()
 
 	//PlayerWidget->SetupAttachment()
 	StatBarWidget->SetupAttachment(GetMesh());
-
-	StatBarWidget->SetRelativeLocation(FVector(0.0f, 0.0f, 100.0f));
+	StatBarWidget->SetRelativeLocation(FVector(0.0f, 0.0f, 200.0f));
 	StatBarWidget->SetWidgetSpace(EWidgetSpace::Screen);
 	static ConstructorHelpers::FClassFinder<UUserWidget> UI_STAT(TEXT("/Game/TPE/Blueprints/UI/UI_StatBar.UI_StatBar_C"));
 
 	if (UI_STAT.Succeeded())
 	{
 		StatBarWidget->SetWidgetClass(UI_STAT.Class);
-		StatBarWidget->SetDrawSize(FVector2D(100.f, 20.0f));
+		StatBarWidget->SetDrawSize(FVector2D(100.f, 15.0f));
+
+		StatBarWidget->SetVisibility(false);
 	}
 
 	AIControllerClass = ATPE_AIController::StaticClass();
@@ -71,23 +72,7 @@ void ATPE_Character::BeginPlay()
 {
 	Super::BeginPlay();
 
-	auto CharacterWidget = Cast<UTPE_CharacterWidget>(StatBarWidget->GetUserWidgetObject());
-	if (nullptr != CharacterWidget)
-	{
-		CharacterWidget->BindCharacterStat(CharacterStat);
-	}
-
-	//ATPECharacter
-	return;
-	auto NewRightWeapon = GetWorld()->SpawnActor<ATPE_Weapon>(ATPE_Weapon::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
-	
-	TPE_CHECK(nullptr != NewRightWeapon);
-	RightEquipWeapon(NewRightWeapon);
-
-	auto NewLeftWeapon = GetWorld()->SpawnActor<ATPE_Weapon>(ATPE_Weapon::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
-	
-	TPE_CHECK(nullptr != NewLeftWeapon);
-	LeftEquipWeapon(NewLeftWeapon);
+	BindStatToWidget();
 }
 
 void ATPE_Character::Die()
@@ -101,15 +86,19 @@ void ATPE_Character::Die()
 	SetActorEnableCollision(false);
 }
 
-void ATPE_Character::SetStatbarWidgetVisibility(bool bFlag)
-{
-	StatBarWidget->SetVisibility(bFlag);
-}
-
 void ATPE_Character::EquipWeapon(FName SocketName, ATPE_Weapon* Weapon)
 {
 	AttachToActor(Weapon, FAttachmentTransformRules(EAttachmentRule::KeepRelative, true), SocketName);
 	Weapon->SetWeaponOwner(this);
+}
+
+void ATPE_Character::BindStatToWidget()
+{
+	auto CharacterWidget = Cast<UTPE_CharacterWidget>(StatBarWidget->GetUserWidgetObject());
+	if (nullptr != CharacterWidget)
+	{
+		CharacterWidget->BindCharacterStat(CharacterStat);
+	}
 }
 
 void ATPE_Character::RightEquipWeapon(ATPE_Weapon* Weapon)

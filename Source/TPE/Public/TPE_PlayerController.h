@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "TPE.h"
 #include "GameFramework/PlayerController.h"
 #include "TPE_PlayerController.generated.h"
 
@@ -24,4 +24,13 @@ public:
 private:
 	UPROPERTY(VisibleAnywhere, Category = UI)
 	class UWidgetComponent* OnScreenControls;
+
+	UPROPERTY(VisibleAnywhere, Category = UI)
+	class UTPE_CharacterWidget* ControlsCharacterWidget;
+
+	UPROPERTY(VisibleAnywhere, Category = "Stat")
+	class UTPECharacterStatComponent* ControllingCharacterStat;
+
+	UPROPERTY(VisibleAnywhere, Category = "Character")
+	class ATPE_Character* ControllingCharacter;
 };

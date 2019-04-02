@@ -23,12 +23,6 @@ void ATPE_AIController::Possess(APawn* InPawn)
 {
 	Super::Possess(InPawn);
 
-	auto Character = Cast<ATPE_Character>(InPawn);
-	if (nullptr != Character)
-	{
-		Character->SetStatbarWidgetVisibility(true);
-	}
-
 	if (UseBlackboard(BBAsset, Blackboard))
 	{
 		Blackboard->SetValueAsVector(HomePosKey, InPawn->GetActorLocation());

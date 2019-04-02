@@ -24,9 +24,6 @@ public:
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
-	UFUNCTION()
-	void OnAttackMontageEnded(class UAnimMontage* Montage, bool bInterrupted);
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -38,14 +35,24 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Status")
 	bool IsDead() const { return bDead; }
 
-	UFUNCTION()
-	void SetStatbarWidgetVisibility(bool bFlag);
+	UFUNCTION(BlueprintCallable, Category = "UI")
+	void SetStatComponent(UTPECharacterStatComponent* NewStat) { CharacterStat = NewStat; }
+
+	UFUNCTION(BlueprintCallable, Category = "UI")
+	UTPECharacterStatComponent* GetStatComponent() const { return CharacterStat; }
 
 	UFUNCTION()
 	virtual void EquipWeapon(FName SocketName, class ATPE_Weapon* NewWeapon);
 
+	UFUNCTION()
+	void BindStatToWidget();
+
+	UFUNCTION()
+	void OnAttackMontageEnded(class UAnimMontage* Montage, bool bInterrupted);
+
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Attack")
 	void Attack();
+
 	FOnAttackEndDelegate OnAttackEnd;
 
 protected:
