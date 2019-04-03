@@ -48,7 +48,6 @@ void ATPE_Character::PostInitializeComponents()
 
 	TPE_Anim->OnMontageEnded.AddDynamic(this, &ATPE_Character::OnAttackMontageEnded);
 
-	CharacterStat->SetNewLevel(IsPlayerControlled() ? 10 : 1);
 	CharacterStat->OnHPIsZero.AddUObject(this, &ATPE_Character::Die);
 }
 
@@ -71,6 +70,8 @@ void ATPE_Character::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupt
 void ATPE_Character::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	CharacterStat->SetNewLevel(IsPlayerControlled() ? 10 : 1);
 
 	BindStatToWidget();
 }

@@ -20,9 +20,13 @@ public:
 protected:
 	virtual void NativeConstruct() override;
 
+	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
+
 	void UpdateHPWidget();
 
 	void UpdateStaminaWidget();
+
+	void UpdateBackWidget(class UProgressBar* BackProgressBar, float FrontProgressBarPercent, float InDeltaTime);
 
 private:
 	TWeakObjectPtr<class UTPECharacterStatComponent> CurrentCharacterStat;
@@ -31,5 +35,17 @@ private:
 	class UProgressBar* HPProgressBar;
 	
 	UPROPERTY()
+	class UProgressBar* HPBackProgressBar;
+
+	UPROPERTY()
+	class UScaleBox* HPScaleBox;
+
+	UPROPERTY()
 	class UProgressBar* StaminaProgressBar;
+	
+	UPROPERTY()
+	class UProgressBar* StaminaBackProgressBar;
+
+	UPROPERTY()
+	class UScaleBox* StaminaScaleBox;
 };
