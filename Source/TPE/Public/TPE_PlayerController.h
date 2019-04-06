@@ -17,20 +17,6 @@ class TPE_API ATPE_PlayerController : public APlayerController
 public:
 	ATPE_PlayerController();
 
-	virtual void BeginPlay() override;
-	virtual void Possess(APawn* InPawn) override; 
-	virtual void UnPossess() override;
-
 private:
-	UPROPERTY(VisibleAnywhere, Category = UI)
-	class UWidgetComponent* OnScreenControls;
 
-	UPROPERTY(VisibleAnywhere, Category = UI)
-	class UTPE_CharacterWidget* ControlsCharacterWidget;
-
-	UPROPERTY(VisibleAnywhere, Category = "Stat")
-	class UTPECharacterStatComponent* ControllingCharacterStat;
-
-	UPROPERTY(VisibleAnywhere, Category = "Character")
-	class ATPE_Character* ControllingCharacter;
 };

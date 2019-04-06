@@ -19,9 +19,9 @@ ATPE_AIController::ATPE_AIController()
 	if (BTObject.Succeeded()) { BTAsset = BTObject.Object; }
 }
 
-void ATPE_AIController::Possess(APawn* InPawn)
+void ATPE_AIController::OnPossess(APawn* InPawn)
 {
-	Super::Possess(InPawn);
+	Super::OnPossess(InPawn);
 
 	if (UseBlackboard(BBAsset, Blackboard))
 	{

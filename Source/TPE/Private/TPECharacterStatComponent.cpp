@@ -85,8 +85,20 @@ float UTPECharacterStatComponent::GetHPRatio() const
 	return (CurrentStatData->MaxHP < KINDA_SMALL_NUMBER) ? 0.0f : (CurrentHP / CurrentStatData->MaxHP);
 }
 
+float UTPECharacterStatComponent::GetMaxHP() const
+{
+	TPE_CHECK(nullptr != CurrentStatData, 0.0f);
+	return (CurrentStatData->MaxHP < KINDA_SMALL_NUMBER) ? 0.0f : CurrentStatData->MaxHP;
+}
+
 float UTPECharacterStatComponent::GetStaminaRatio() const
 {
 	TPE_CHECK(nullptr != CurrentStatData, 0.0f);
 	return (CurrentStatData->MaxStamina < KINDA_SMALL_NUMBER) ? 0.0f : (CurrentStamina / CurrentStatData->MaxStamina);
+}
+
+float UTPECharacterStatComponent::GetMaxStamina() const
+{
+	TPE_CHECK(nullptr != CurrentStatData, 0.0f);
+	return (CurrentStatData->MaxStamina < KINDA_SMALL_NUMBER) ? 0.0f : CurrentStatData->MaxStamina;
 }

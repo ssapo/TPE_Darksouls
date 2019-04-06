@@ -17,7 +17,7 @@ class TPE_API ATPE_AIController : public AAIController
 public:
 	ATPE_AIController();
 
-	virtual void Possess(APawn* InPawn) override;
+	virtual void OnPossess(APawn* InPawn) override;
 
 public:
 	static const FName HomePosKey;

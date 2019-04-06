@@ -4,14 +4,32 @@
 #include "TPECharacterStatComponent.h"
 #include "Components/ProgressBar.h"
 #include "Components/ScaleBox.h"
+#include "Components/CanvasPanel.h"
+#include "Components/CanvasPanelSlot.h"
 
-void UTPE_CharacterWidget::BindCharacterStat(UTPECharacterStatComponent* NewCharacterStat)
+void UTPE_CharacterWidget::BindCharacterStat(UTPECharacterStatComponent* NewCharacterStat, bool bPlayer)
 {
 	TPE_CHECK(nullptr != NewCharacterStat);
 
 	CurrentCharacterStat = NewCharacterStat;
-	NewCharacterStat->OnHPChanged.AddUObject(this, &UTPE_CharacterWidget::UpdateHPWidget);
-	NewCharacterStat->OnStaminaChanged.AddUObject(this, &UTPE_CharacterWidget::UpdateStaminaWidget);
+	CurrentCharacterStat->OnHPChanged.AddUObject(this, &UTPE_CharacterWidget::UpdateHPWidget);
+	CurrentCharacterStat->OnStaminaChanged.AddUObject(this, &UTPE_CharacterWidget::UpdateStaminaWidget);
+
+	auto StaminaCanvasPanel = Cast<UCanvasPanel>(GetWidgetFromName(TEXT("CP_Stamina")));
+	TPE_CHECK(nullptr != StaminaCanvasPanel);
+
+	StaminaCanvasPanel->SetVisibility(bPlayer ? ESlateVisibility::Visible : ESlateVisibility::Hidden);
+
+	auto HPScaleBox = Cast<UScaleBox>(GetWidgetFromName(TEXT("SB_HP")));
+	TPE_CHECK(nullptr != HPScaleBox);
+
+	auto HPCanvasPanelSlot = Cast<UCanvasPanelSlot>(HPScaleBox->Slot);
+	TPE_CHECK(nullptr != HPCanvasPanelSlot);
+
+	HPCanvasPanelSlot->SetSize(bPlayer ? FVector2D(CurrentCharacterStat->GetMaxHP()/2.0f, 10.0f) : FVector2D(300.0f, 10.0f));
+
+	UpdateHPWidget();
+	UpdateStaminaWidget();
 }
 
 void UTPE_CharacterWidget::NativeConstruct()
@@ -26,13 +44,8 @@ void UTPE_CharacterWidget::NativeConstruct()
 
 	HPBackProgressBar->SetPercent(1.0f);
 	
-	HPScaleBox = Cast<UScaleBox>(GetWidgetFromName(TEXT("SB_HP")));
-	TPE_CHECK(nullptr != HPScaleBox);
-
-	//HPScaleBox->GetCachedGeometry().GetLocalSize();
-
 	UpdateHPWidget();
-	
+
 	StaminaProgressBar = Cast<UProgressBar>(GetWidgetFromName(TEXT("PB_StaminaBar")));
 	TPE_CHECK(nullptr != StaminaProgressBar);
 
@@ -41,23 +54,20 @@ void UTPE_CharacterWidget::NativeConstruct()
 
 	StaminaBackProgressBar->SetPercent(1.0f);
 	
-	StaminaScaleBox = Cast<UScaleBox>(GetWidgetFromName(TEXT("SB_Stamina")));
-	TPE_CHECK(nullptr != StaminaScaleBox);
-
 	UpdateStaminaWidget();
 }
 
 void UTPE_CharacterWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 {
-	TPE_CHECK(nullptr != HPProgressBar);
-	TPE_CHECK(nullptr != HPBackProgressBar);
+	if (HPProgressBar && HPProgressBar->IsVisible())
+	{
+		UpdateBackWidget(HPBackProgressBar, HPProgressBar->Percent, InDeltaTime);
+	}
 
-	UpdateBackWidget(HPBackProgressBar, HPProgressBar->Percent, InDeltaTime);
-
-	TPE_CHECK(nullptr != StaminaProgressBar);
-	TPE_CHECK(nullptr != StaminaBackProgressBar);
-
-	UpdateBackWidget(StaminaBackProgressBar, StaminaProgressBar->Percent, InDeltaTime);
+	if (StaminaProgressBar && StaminaProgressBar->IsVisible())
+	{
+		UpdateBackWidget(StaminaBackProgressBar, StaminaProgressBar->Percent, InDeltaTime);
+	}
 }
 
 void UTPE_CharacterWidget::UpdateHPWidget()

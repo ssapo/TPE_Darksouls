@@ -34,18 +34,21 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Status")
 	bool IsDead() const { return bDead; }
-
-	UFUNCTION(BlueprintCallable, Category = "UI")
-	void SetStatComponent(UTPECharacterStatComponent* NewStat) { CharacterStat = NewStat; }
-
+	
 	UFUNCTION(BlueprintCallable, Category = "UI")
 	UTPECharacterStatComponent* GetStatComponent() const { return CharacterStat; }
 
-	UFUNCTION()
-	virtual void EquipWeapon(FName SocketName, class ATPE_Weapon* NewWeapon);
+	UFUNCTION(BlueprintCallable, Category = "UI")
+	class UWidgetComponent* GetWidgetComponent() const { return StatBarWidget; }
+
+	UFUNCTION(BlueprintCallable, Category = "Equip")
+	class ATPE_Weapon* GetRightWeapon() const { return RightWeapon; }
+
+	UFUNCTION(BlueprintCallable, Category = "Equip")
+	class ATPE_Weapon* GetLeftWeapon() const { return LeftWeapon; }
 
 	UFUNCTION()
-	void BindStatToWidget();
+	virtual void EquipWeapon(FName SocketName, class ATPE_Weapon* NewWeapon);
 
 	UFUNCTION()
 	void OnAttackMontageEnded(class UAnimMontage* Montage, bool bInterrupted);
@@ -56,10 +59,10 @@ public:
 	FOnAttackEndDelegate OnAttackEnd;
 
 protected:
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, Category = "Equip")
 	virtual void RightEquipWeapon(class ATPE_Weapon* Weapon);
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, Category = "Equip")
 	virtual void LeftEquipWeapon(class ATPE_Weapon* Weapon);
 
 private:
@@ -72,10 +75,13 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = UI)
 	class UWidgetComponent* StatBarWidget;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equip", Meta = (AllowPrivateAccess = true))
+	UPROPERTY(VisibleAnywhere, Category = UI)
+	class UWidgetComponent* OnScreenControls;
+
+	UPROPERTY(VisibleAnywhere, Category = "Equip")
 	class ATPE_Weapon* RightWeapon;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equip", Meta = (AllowPrivateAccess = true))
+	UPROPERTY(VisibleAnywhere, Category = "Equip")
 	class ATPE_Weapon* LeftWeapon;
 
 	bool bDead = false;

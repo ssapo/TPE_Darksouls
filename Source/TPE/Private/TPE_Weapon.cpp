@@ -75,11 +75,22 @@ void ATPE_Weapon::InitWeapon(UMeshComponent* NewWeaponBody, UPrimitiveComponent*
 
 void ATPE_Weapon::OverlapBegin_Implementation(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if ((true == OtherActor->IsA(ATPE_Character::StaticClass()) && WeaponOwner != OtherActor)
-		|| (true == OtherActor->IsA(ATPE_Actor::StaticClass()) && false == OtherActor->IsA(ATPE_Weapon::StaticClass()))
-		)
+	if (OtherActor->IsA(ATPE_Character::StaticClass()) && WeaponOwner != OtherActor)
 	{
-		if (false == OtherActor->bCanBeDamaged) { return; }
+		auto OtherTPECharacter = Cast<ATPE_Character>(OtherActor);
+		if (OtherTPECharacter)
+		{
+			if (!WeaponOwner->IsPlayerControlled() == !OtherTPECharacter->IsPlayerControlled()) { return; }
+
+			if (!OtherTPECharacter->bCanBeDamaged) { return; }
+
+			OtherTPECharacter->TakeDamage(30.0f, FDamageEvent(), WeaponOwner->GetController(), this);
+			OtherTPECharacter->bCanBeDamaged = false;
+		}
+	}
+	else if (OtherActor->IsA(ATPE_Actor::StaticClass()) && !OtherActor->IsA(ATPE_Weapon::StaticClass()))
+	{
+		if (!OtherActor->bCanBeDamaged) { return; }
 
 		OtherActor->TakeDamage(30.0f, FDamageEvent(), WeaponOwner->GetController(), this);
 		OtherActor->bCanBeDamaged = false;
@@ -88,15 +99,31 @@ void ATPE_Weapon::OverlapBegin_Implementation(UPrimitiveComponent* OverlappedCom
 
 void ATPE_Weapon::OverlapEnd_Implementation(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	if ((true == OtherActor->IsA(ATPE_Character::StaticClass()) && WeaponOwner != OtherActor)
-		|| (true == OtherActor->IsA(ATPE_Actor::StaticClass()) && false == OtherActor->IsA(ATPE_Weapon::StaticClass()))
-		)
+	if (OtherActor->IsA(ATPE_Character::StaticClass()) && WeaponOwner != OtherActor)
 	{
+		auto OtherTPECharacter = Cast<ATPE_Character>(OtherActor);
+		if (OtherTPECharacter)
+		{
+			if (!WeaponOwner->IsPlayerControlled() == !OtherTPECharacter->IsPlayerControlled()) { return; }
+
+			if (OtherTPECharacter->bCanBeDamaged) { return; }
+			
+			FTimerHandle UnusedHandle;
+			GetWorld()->GetTimerManager().SetTimer(UnusedHandle, [=]() {
+				OtherActor->bCanBeDamaged = true;
+			}, AttackDelayTime, false);
+		}
+	}
+	else if (OtherActor->IsA(ATPE_Actor::StaticClass()) && !OtherActor->IsA(ATPE_Weapon::StaticClass()))
+	{
+		if (OtherActor->bCanBeDamaged) { return; }
+		
 		FTimerHandle UnusedHandle;
 		GetWorld()->GetTimerManager().SetTimer(UnusedHandle, [=]() {
 			OtherActor->bCanBeDamaged = true;
 		}, AttackDelayTime, false);
 	}
+
 }
 
 

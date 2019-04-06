@@ -23,8 +23,6 @@ bool UBTDecorator_IsInAttackRange::CalculateRawConditionValue(UBehaviorTreeCompo
 	if (nullptr == Target) { return false; }
 
 	auto Dist = Target->GetDistanceTo(ControllingCharacter);
-	TPE_PRINT(FColor::Emerald, TEXT("distance: %f"), Dist);
-
 	bResult = (Dist <= 200.0f);
 	return bResult;
 }

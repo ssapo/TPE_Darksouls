@@ -15,7 +15,7 @@ class TPE_API UTPE_CharacterWidget : public UUserWidget
 	GENERATED_BODY()
 	
 public:
-	void BindCharacterStat(class UTPECharacterStatComponent* NewCharacterStat);
+	void BindCharacterStat(class UTPECharacterStatComponent* NewCharacterStat, bool bPlayer);
 
 protected:
 	virtual void NativeConstruct() override;
@@ -38,14 +38,8 @@ private:
 	class UProgressBar* HPBackProgressBar;
 
 	UPROPERTY()
-	class UScaleBox* HPScaleBox;
-
-	UPROPERTY()
 	class UProgressBar* StaminaProgressBar;
 	
 	UPROPERTY()
 	class UProgressBar* StaminaBackProgressBar;
-
-	UPROPERTY()
-	class UScaleBox* StaminaScaleBox;
 };

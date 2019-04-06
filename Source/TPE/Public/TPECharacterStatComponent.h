@@ -47,7 +47,13 @@ public:
 	float GetHPRatio() const;
 
 	UFUNCTION(BlueprintCallable, Category = Stat)
+	float GetMaxHP() const;
+
+	UFUNCTION(BlueprintCallable, Category = Stat)
 	float GetStaminaRatio() const;
+
+	UFUNCTION(BlueprintCallable, Category = Stat)
+	float GetMaxStamina() const;
 
 public:
 	FOnHPIsZeroDelegate OnHPIsZero;
@@ -66,7 +72,7 @@ private:
 
 	UPROPERTY(Transient, VisibleInstanceOnly, Category = Stat, Meta = (AllowPrivateAccess = true))
 	float CurrentHP;
-	
+
 	UPROPERTY(Transient, VisibleInstanceOnly, Category = Stat, Meta = (AllowPrivateAccess = true))
 	float CurrentStamina;
 };

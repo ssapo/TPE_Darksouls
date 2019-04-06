@@ -13,24 +13,34 @@ ATPE_Character::ATPE_Character()
 {
 	CharacterStat = CreateDefaultSubobject<UTPECharacterStatComponent>(TEXT("CHARACTERSTAT"));
 	StatBarWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("STATBARWIDGET"));
+	OnScreenControls = CreateDefaultSubobject<UWidgetComponent>(TEXT("ONSCREENCONTROLS"));
 
-	//PlayerWidget->SetupAttachment()
 	StatBarWidget->SetupAttachment(GetMesh());
-	StatBarWidget->SetRelativeLocation(FVector(0.0f, 0.0f, 200.0f));
+	StatBarWidget->SetRelativeLocation(FVector(0.0f, 0.0f, 150.0f));
 	StatBarWidget->SetWidgetSpace(EWidgetSpace::Screen);
+	
 	static ConstructorHelpers::FClassFinder<UUserWidget> UI_STAT(TEXT("/Game/TPE/Blueprints/UI/UI_StatBar.UI_StatBar_C"));
 
 	if (UI_STAT.Succeeded())
 	{
-		StatBarWidget->SetWidgetClass(UI_STAT.Class);
-		StatBarWidget->SetDrawSize(FVector2D(100.f, 15.0f));
+		TPE_LOG(Warning, TEXT("Success UI_STAT"));
 
+		StatBarWidget->SetWidgetClass(UI_STAT.Class);
+		StatBarWidget->SetDrawSize(FVector2D(150.f, 12.5f));
 		StatBarWidget->SetVisibility(false);
+	}
+
+	static ConstructorHelpers::FClassFinder<UUserWidget> UI_ONSCREENCONTROLS(TEXT("/Game/TPE/Blueprints/UI/UI_PlayerOnScreenControls.UI_PlayerOnScreenControls_C"));
+
+	if (UI_ONSCREENCONTROLS.Succeeded())
+	{
+		OnScreenControls->SetWidgetClass(UI_ONSCREENCONTROLS.Class);
+		OnScreenControls->SetVisibility(false);
 	}
 
 	AIControllerClass = ATPE_AIController::StaticClass();
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
-	
+
 	bDead = false;
 }
 
@@ -54,7 +64,6 @@ void ATPE_Character::PostInitializeComponents()
 float ATPE_Character::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
 {
 	float FinalDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-	TPE_LOG(Warning, TEXT("Actor : %s took Damage %f"), *GetName(), FinalDamage);
 
 	CharacterStat->SetDamage(FinalDamage);
 	return FinalDamage;
@@ -71,9 +80,35 @@ void ATPE_Character::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	CharacterStat->SetNewLevel(IsPlayerControlled() ? 10 : 1);
+	bool bPlayerControlled = IsPlayerControlled();
 
-	BindStatToWidget();
+	CharacterStat->SetNewLevel(bPlayerControlled ? 5 : 1);
+
+	if (bPlayerControlled)
+	{
+		if (nullptr != OnScreenControls)
+		{
+			auto UserWidget = OnScreenControls->GetUserWidgetObject();
+			if (nullptr != UserWidget)
+			{
+				auto StatBar = Cast<UTPE_CharacterWidget>(UserWidget->GetWidgetFromName(TEXT("StatBar")));
+				if (nullptr != StatBar)
+				{
+					UserWidget->AddToViewport();
+
+					StatBar->BindCharacterStat(CharacterStat, true);
+				}
+			}
+		}
+	}
+	else
+	{
+		auto CharacterWidget = Cast<UTPE_CharacterWidget>(StatBarWidget->GetUserWidgetObject());
+		if (nullptr != CharacterWidget)
+		{
+			CharacterWidget->BindCharacterStat(CharacterStat, bPlayerControlled);
+		}
+	}
 }
 
 void ATPE_Character::Die()
@@ -81,37 +116,31 @@ void ATPE_Character::Die()
 	TPE_CHECK(nullptr != TPE_Anim)
 
 	bDead = true;
-	TPE_Anim->SetDeadAnim();
 
-	StatBarWidget->SetVisibility(false);
+	TPE_Anim->SetDeadAnim();
 	SetActorEnableCollision(false);
+
+	FTimerHandle UnusedHandle;
+	GetWorld()->GetTimerManager().SetTimer(UnusedHandle, [this]() {
+		StatBarWidget->SetVisibility(false);
+	}, 2.0f, false);
 }
 
 void ATPE_Character::EquipWeapon(FName SocketName, ATPE_Weapon* Weapon)
 {
-	AttachToActor(Weapon, FAttachmentTransformRules(EAttachmentRule::KeepRelative, true), SocketName);
-	Weapon->SetWeaponOwner(this);
-}
+	Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::KeepRelative, true), SocketName);
 
-void ATPE_Character::BindStatToWidget()
-{
-	auto CharacterWidget = Cast<UTPE_CharacterWidget>(StatBarWidget->GetUserWidgetObject());
-	if (nullptr != CharacterWidget)
-	{
-		CharacterWidget->BindCharacterStat(CharacterStat);
-	}
+	Weapon->SetWeaponOwner(this);
 }
 
 void ATPE_Character::RightEquipWeapon(ATPE_Weapon* Weapon)
 {
-	TPE_PRINT(FColor::Red, TEXT("RightEquipWeapon"));
-	EquipWeapon("socket_ik_hand_r", Weapon);
+	EquipWeapon(TEXT("socket_ik_hand_r"), Weapon);
 	RightWeapon = Weapon;
 }
 
 void ATPE_Character::LeftEquipWeapon(ATPE_Weapon* Weapon)
 {
-	TPE_PRINT(FColor::Red, TEXT("LeftEquipWeapon"));
-	EquipWeapon("socket_ik_hand_l", Weapon);
+	EquipWeapon(TEXT("socket_ik_hand_l"), Weapon);
 	LeftWeapon = Weapon;
 }

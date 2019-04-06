@@ -22,9 +22,9 @@ EBTNodeResult::Type UBTTask_FindPatrolPos::ExecuteTask(UBehaviorTreeComponent& O
 	if (nullptr == NavSystem) { return EBTNodeResult::Failed; }
 
 	auto Origin = OwnerComp.GetBlackboardComponent()->GetValueAsVector(ATPE_AIController::HomePosKey);
+	
 	FNavLocation NextPatrol;
-
-	if (NavSystem->GetRandomPointInNavigableRadius(FVector::ZeroVector, 500.0f, NextPatrol))
+	if (NavSystem->GetRandomPointInNavigableRadius(Origin, 1000.0f, NextPatrol))
 	{
 		OwnerComp.GetBlackboardComponent()->SetValueAsVector(ATPE_AIController::PatrolPosKey, NextPatrol.Location);
 
