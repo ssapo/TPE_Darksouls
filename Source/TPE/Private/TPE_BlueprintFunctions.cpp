@@ -3,17 +3,17 @@
 #include "TPE_BlueprintFunctions.h"
 
 
-FORCEINLINE float UTPE_BlueprintFunctions::GetDistanceWithTwoVectors(const FVector& vec1, const FVector& vec2)
+float UTPE_BlueprintFunctions::GetDistanceWithTwoVectors(const FVector& vec1, const FVector& vec2)
 {
 	return (vec2 - vec1).Size();
 }
 
-FORCEINLINE FVector UTPE_BlueprintFunctions::GetZeroVector()
+FVector UTPE_BlueprintFunctions::GetZeroVector()
 {
 	return FVector::ZeroVector;
 }
 
-FORCEINLINE FTransform UTPE_BlueprintFunctions::GetTransformIdentity()
+FTransform UTPE_BlueprintFunctions::GetTransformIdentity()
 {
 	return FTransform::Identity;
 }
