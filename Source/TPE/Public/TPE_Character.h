@@ -4,6 +4,7 @@
 
 #include "TPE.h"
 #include "GameFramework/Character.h"
+#include "TPE_Rotating.h"
 #include "TPE_Character.generated.h"
 
 DECLARE_MULTICAST_DELEGATE(FOnAttackEndDelegate);
@@ -77,7 +78,7 @@ private:
 	
 	UPROPERTY(VisibleAnywhere, Category = UI)
 	class UWidgetComponent* OnScreenControls;
-
+	
 	UPROPERTY(VisibleAnywhere, Category = "Equip")
 	class ATPE_Weapon* RightWeapon;
 

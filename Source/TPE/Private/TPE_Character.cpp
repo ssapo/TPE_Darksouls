@@ -7,6 +7,7 @@
 #include "TPE_CharacterWidget.h"
 #include "TPE_AIController.h"
 #include "TPE_Weapon.h"
+#include "TPE_RotatingComponent.h"
 
 // Sets default values
 ATPE_Character::ATPE_Character()
