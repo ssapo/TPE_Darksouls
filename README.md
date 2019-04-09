@@ -10,6 +10,7 @@ Video : <https://www.youtube.com/watch?v=R4pQndIzbyc&t=38s>
 
 
 Implemented features
+====================
 Combat system
 - attack
 - combo attack
