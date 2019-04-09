@@ -3,7 +3,7 @@ TPE_Darksouls (Third Person Exercise)
 
 This repo is personal practice ue4 project with implementing darksouls combat system.
 
-Video : <https://www.youtube.com/watch?v=R4pQndIzbyc&t=38s>
+Video : <https://youtu.be/R4pQndIzbyc>
 
 
 
