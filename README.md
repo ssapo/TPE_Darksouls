@@ -9,7 +9,7 @@ Video : <https://www.youtube.com/watch?v=R4pQndIzbyc&t=38s>
 ![img](https://imgur.com/ZhJ8VdJ.png)
 
 
-Implemented Features
+Implemented features
 Combat system
 - attack
 - combo attack
