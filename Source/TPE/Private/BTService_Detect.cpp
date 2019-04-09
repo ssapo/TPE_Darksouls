@@ -19,11 +19,11 @@ void UBTService_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 	OwnerComp.GetBlackboardComponent()->SetValueAsObject(ATPE_AIController::TargetKey, nullptr);
 
 	auto ControllingPawn = Cast<ATPE_Character>(OwnerComp.GetAIOwner()->GetPawn());
-	if (nullptr == ControllingPawn || true == ControllingPawn->IsDead()) { return;}
+	if (!ControllingPawn || ControllingPawn->IsDead()) { return; }
 
 	auto World = ControllingPawn->GetWorld();
 	auto Center = ControllingPawn->GetActorLocation();
-	auto DetectRadius = 800.0f;
+	auto DetectRadius = 1500.0f;
 
 	if (nullptr == World) { return; }
 	
@@ -49,6 +49,9 @@ void UBTService_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 			if (Character && Character->GetController()->IsPlayerController())
 			{
 				OwnerComp.GetBlackboardComponent()->SetValueAsObject(ATPE_AIController::TargetKey, Character);
+
+				OwnerComp.GetBlackboardComponent()->SetValueAsBool(ATPE_AIController::IsInBattleKey, true);
+
 				DrawDebugSphere(World, Center, DetectRadius, 16, FColor::Green, false, 0.4f);
 
 				DrawDebugPoint(World, Character->GetActorLocation(), 10.0f, FColor::Blue, false, 0.2f);

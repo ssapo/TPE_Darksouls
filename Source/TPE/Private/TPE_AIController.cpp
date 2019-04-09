@@ -9,6 +9,7 @@
 const FName ATPE_AIController::HomePosKey(TEXT("HomePos"));
 const FName ATPE_AIController::PatrolPosKey(TEXT("PatrolPos"));
 const FName ATPE_AIController::TargetKey(TEXT("Target"));
+const FName ATPE_AIController::IsInBattleKey(TEXT("IsInBattle"));
 
 ATPE_AIController::ATPE_AIController()
 {
@@ -26,6 +27,8 @@ void ATPE_AIController::OnPossess(APawn* InPawn)
 	if (UseBlackboard(BBAsset, Blackboard))
 	{
 		Blackboard->SetValueAsVector(HomePosKey, InPawn->GetActorLocation());
+		Blackboard->SetValueAsBool(IsInBattleKey, false);
+
 		if (!RunBehaviorTree(BTAsset))
 		{
 			TPE_LOG(Error, TEXT("AIController couldn't run behavior tree!"));
