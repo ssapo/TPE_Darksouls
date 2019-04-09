@@ -1,37 +1,35 @@
-## Welcome to GitHub Pages
+TPE_Darksouls (Third Person Exercise)
+=================================
 
-You can use the [editor on GitHub](https://github.com/ssapo/Project-TPE/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+This repo is personal practice ue4 project with implementing darksouls combat system.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+Video : <https://youtu.be/R4pQndIzbyc>
 
-### Markdown
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
 
-```markdown
-Syntax highlighted code block
+![img](https://imgur.com/ZhJ8VdJ.png)
 
-# Header 1
-## Header 2
-### Header 3
 
-- Bulleted
-- List
+Implemented features
+====================
+Combat system
+- attack
+- combo attack
+- dash
+- dash attack
+- lockon
+- follow camera to lockon target
+- rotating to lockon target when attack
 
-1. Numbered
-2. List
+Equip weapon
+- static Equiped.. not dynamic
+- just twin blade.
 
-**Bold** and _Italic_ and `Code` text
+Simple AI
+- search around
+- chest player character
+- attack
 
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/ssapo/Project-TPE/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+Used Asset
+- StarterContent
+- TwinSwordAnimSetBase
