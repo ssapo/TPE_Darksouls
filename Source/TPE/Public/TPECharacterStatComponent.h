@@ -27,6 +27,8 @@ protected:
 
 	virtual void InitializeComponent() override;
 
+	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
+
 public:
 	UFUNCTION(BlueprintCallable, Category = Stat)
 	void SetNewLevel(int32 NewLevel);
@@ -35,10 +37,19 @@ public:
 	void SetDamage(int32 NewDamage);
 
 	UFUNCTION(BlueprintCallable, Category = Stat)
+	void AddStamina(float Value);
+
+	UFUNCTION(BlueprintCallable, Category = Stat)
+	void SubStamina(float Value);
+
+	UFUNCTION(BlueprintCallable, Category = Stat)
 	void SetHP(float NewHP);
 
 	UFUNCTION(BlueprintCallable, Category = Stat)
 	void SetStamina(float NewStamina);
+
+	UFUNCTION(BlueprintCallable, Category = Stat)
+	bool IsEnoughStamina(float CostStamina) const;
 
 	UFUNCTION(BlueprintCallable, Category = Stat)
 	float GetAttack() const;

@@ -78,6 +78,14 @@ void UTPE_CharacterWidget::UpdateHPWidget()
 		{
 			HPProgressBar->SetPercent(CurrentCharacterStat->GetHPRatio());
 		}
+
+		if (nullptr != HPBackProgressBar)
+		{
+			if (CurrentCharacterStat->GetStaminaRatio() > HPBackProgressBar->Percent)
+			{
+				HPBackProgressBar->SetPercent(CurrentCharacterStat->GetHPRatio());
+			}
+		}
 	}
 }
 
@@ -88,6 +96,14 @@ void UTPE_CharacterWidget::UpdateStaminaWidget()
 		if (nullptr != StaminaProgressBar)
 		{
 			StaminaProgressBar->SetPercent(CurrentCharacterStat->GetStaminaRatio());
+		}
+
+		if (nullptr != StaminaBackProgressBar)
+		{
+			if (CurrentCharacterStat->GetStaminaRatio() > StaminaBackProgressBar->Percent)
+			{
+				StaminaBackProgressBar->SetPercent(CurrentCharacterStat->GetStaminaRatio());
+			}
 		}
 	}
 }

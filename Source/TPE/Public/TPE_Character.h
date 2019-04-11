@@ -54,6 +54,9 @@ public:
 	UFUNCTION()
 	void OnAttackMontageEnded(class UAnimMontage* Montage, bool bInterrupted);
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Dash")
+	void Dash();
+
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Attack")
 	void Attack();
 
@@ -67,7 +70,7 @@ protected:
 	virtual void LeftEquipWeapon(class ATPE_Weapon* Weapon);
 
 private:
-	UPROPERTY(VisibleAnywhere, Category = Stat)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Stat, Meta = (AllowPrivateAccess = true))
 	class UTPECharacterStatComponent* CharacterStat;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Pawn, Meta = (AllowPrivateAccess = true))

@@ -8,7 +8,7 @@ UTPECharacterStatComponent::UTPECharacterStatComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = false;
+	PrimaryComponentTick.bCanEverTick = true;
 	bWantsInitializeComponent = true;
 
 	Level = 1;
@@ -26,6 +26,15 @@ void UTPECharacterStatComponent::InitializeComponent()
 	Super::InitializeComponent();
 	SetNewLevel(Level);
 }
+
+
+void UTPECharacterStatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+{
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	
+	AddStamina(10.0f * DeltaTime);
+}
+
 
 void UTPECharacterStatComponent::SetNewLevel(int32 NewLevel)
 {
@@ -51,6 +60,18 @@ void UTPECharacterStatComponent::SetDamage(int32 NewDamage)
 	SetHP(FMath::Clamp<float>(CurrentHP - NewDamage, 0.0f, CurrentStatData->MaxHP));
 }
 
+void UTPECharacterStatComponent::AddStamina(float Value)
+{
+	TPE_CHECK(nullptr != CurrentStatData);
+	SetStamina(FMath::Clamp<float>(CurrentStamina + Value, 0.0f, CurrentStatData->MaxStamina));
+}
+
+void UTPECharacterStatComponent::SubStamina(float Value)
+{
+	TPE_CHECK(nullptr != CurrentStatData);
+	SetStamina(FMath::Clamp<float>(CurrentStamina - Value, 0.0f, CurrentStatData->MaxStamina));
+}
+
 void UTPECharacterStatComponent::SetHP(float NewHP)
 {
 	CurrentHP = NewHP;
@@ -71,6 +92,11 @@ void UTPECharacterStatComponent::SetStamina(float NewStamina)
 		CurrentStamina = 0.0f;
 		OnStaminaIsZero.Broadcast();
 	}
+}
+
+bool UTPECharacterStatComponent::IsEnoughStamina(float CostStamina) const
+{
+	return CurrentStamina >= CostStamina;
 }
 
 float UTPECharacterStatComponent::GetAttack() const
