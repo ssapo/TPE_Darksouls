@@ -6,7 +6,12 @@ UTPE_AnimInstance::UTPE_AnimInstance()
 {
 	CurrentPawnSpeed = 0.0f;
 
-	IsDead = false;
+	bIsDead = false;
+	bIsInAir = false;
+	bCanStopDash = true;
+	bCanInturuptAttacking = true;
+	bCanInturuptDash = false;
+	bCanCombo = false;
 }
 
 void UTPE_AnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -16,12 +21,12 @@ void UTPE_AnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	auto Pawn = TryGetPawnOwner();
 	if (!::IsValid(Pawn)) return;
 
-	if (!IsDead)
+	if (!bIsDead)
 	{
 		CurrentPawnSpeed = Pawn->GetVelocity().Size();
 
 		auto Character = Cast<ACharacter>(Pawn);
-		if (Character) { IsInAir = Character->GetMovementComponent()->IsFalling(); }
+		if (Character) { bIsInAir = Character->GetMovementComponent()->IsFalling(); }
 	}
 }
 

@@ -81,7 +81,7 @@ void UTPE_CharacterWidget::UpdateHPWidget()
 
 		if (nullptr != HPBackProgressBar)
 		{
-			if (CurrentCharacterStat->GetStaminaRatio() > HPBackProgressBar->Percent)
+			if (CurrentCharacterStat->GetHPRatio() > HPBackProgressBar->Percent)
 			{
 				HPBackProgressBar->SetPercent(CurrentCharacterStat->GetHPRatio());
 			}

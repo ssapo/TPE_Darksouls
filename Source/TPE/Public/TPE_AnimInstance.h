@@ -19,15 +19,55 @@ public:
 
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
-	void SetDeadAnim() { IsDead = true; }
+	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
+	void SetDeadAnim() { bIsDead = true; }
+
+	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
+	bool IsDead() const { return bIsDead; }
+
+	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
+	void SetCanInturuptAttacking(bool NewValue) { bCanInturuptAttacking = NewValue; }
+
+	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
+	bool CanInturuptAttacking() const { return bCanInturuptAttacking; }
+
+	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
+	void SetInAir(bool NewValue) { bIsInAir = NewValue; }
+
+	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
+	bool IsInAir() const { return bIsInAir; }
+
+	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
+	void SetCanStopDash(bool NewValue) { bCanStopDash = NewValue; }
+
+	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
+	bool CanStopDash() const { return bCanStopDash; }
+
+	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
+	void SetCanCombo(bool NewValue) { bCanCombo = NewValue; }
+
+	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
+	bool CanCombo() const { return bCanCombo; }
+
+	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
+	void SetCanInturuptDash(bool NewValue) { bCanInturuptDash = NewValue; }
+
+	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
+	bool CanInturuptDash() const { return bCanInturuptDash; }
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
 	float CurrentPawnSpeed;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
-	bool IsInAir;
+	bool bIsInAir;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
-	bool IsDead;
+	bool bCanInturuptAttacking;
+
+	bool bCanStopDash;
+	
+	bool bCanCombo;
+
+	bool bIsDead;
+
+	bool bCanInturuptDash;
 };
