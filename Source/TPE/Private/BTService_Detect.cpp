@@ -38,8 +38,6 @@ void UBTService_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 		CollisionQueryParam
 	);
 
-	DrawDebugSphere(World, Center, DetectRadius, 16, FColor::Red, false, 0.2f);
-
 	if (0 < OverlapResults.Num())
 	{
 		for (auto OverlapResult : OverlapResults)
@@ -51,8 +49,6 @@ void UBTService_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 				OwnerComp.GetBlackboardComponent()->SetValueAsObject(ATPE_AIController::TargetKey, Character);
 
 				OwnerComp.GetBlackboardComponent()->SetValueAsBool(ATPE_AIController::IsInBattleKey, true);
-
-				DrawDebugSphere(World, Center, DetectRadius, 16, FColor::Green, false, 0.4f);
 
 				DrawDebugPoint(World, Character->GetActorLocation(), 10.0f, FColor::Blue, false, 0.2f);
 				DrawDebugLine(World, ControllingPawn->GetActorLocation(), Character->GetActorLocation(), FColor::Blue, false, 2.0f);

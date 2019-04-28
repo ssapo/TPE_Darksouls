@@ -10,9 +10,6 @@
 ATPE_Weapon::ATPE_Weapon()
 {
 	PrimaryActorTick.bCanEverTick = false;
-
-	TrailInWidth = 1.5f;
-	AttackDelayTime = 0.2f;
 }
 
 // Called when the game starts or when spawned

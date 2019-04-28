@@ -15,9 +15,13 @@ class TPE_API UTPE_AnimInstance : public UAnimInstance
 	GENERATED_BODY()
 	
 public:
-	UTPE_AnimInstance();
-
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
+
+	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
+	void SetStunned(bool NewValue) { bStunned = NewValue; }
+
+	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
+	bool IsStunned() const { return bStunned; }
 
 	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
 	void SetDeadAnim() { bIsDead = true; }
@@ -57,17 +61,22 @@ public:
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
-	float CurrentPawnSpeed;
+	float CurrentPawnSpeed = 0.0f;
 
-	bool bIsInAir;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
+	float CurrentRotationRate = 0.0f;
 
-	bool bCanInturuptAttacking;
+	bool bStunned = false;
 
-	bool bCanStopDash;
+	bool bIsInAir = false;
+
+	bool bCanInturuptAttacking = true;
+
+	bool bCanStopDash = true;
 	
-	bool bCanCombo;
+	bool bCanCombo = false;
 
-	bool bIsDead;
+	bool bIsDead = false;
 
-	bool bCanInturuptDash;
+	bool bCanInturuptDash = false;
 };

@@ -66,9 +66,9 @@ private:
 	class UParticleSystemComponent* WeaponEffect;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = true))
-	float TrailInWidth;
+	float TrailInWidth = 1.5f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = true))
-	float AttackDelayTime;
+	float AttackDelayTime = 0.2f;
 
 };

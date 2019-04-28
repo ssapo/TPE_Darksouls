@@ -2,18 +2,6 @@
 
 #include "TPE_AnimInstance.h"
 
-UTPE_AnimInstance::UTPE_AnimInstance()
-{
-	CurrentPawnSpeed = 0.0f;
-
-	bIsDead = false;
-	bIsInAir = false;
-	bCanStopDash = true;
-	bCanInturuptAttacking = true;
-	bCanInturuptDash = false;
-	bCanCombo = false;
-}
-
 void UTPE_AnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
@@ -24,6 +12,12 @@ void UTPE_AnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	if (!bIsDead)
 	{
 		CurrentPawnSpeed = Pawn->GetVelocity().Size();
+
+		static FVector2D InputRange(-180.0f, 180.0f);
+		static FVector2D OutputRange(-50.0f, 50.0f);
+
+		float Yaw = Pawn->GetControlRotation().Yaw - Pawn->GetActorRotation().Yaw;
+		CurrentRotationRate = FMath::GetMappedRangeValueClamped(InputRange, OutputRange, Yaw);
 
 		auto Character = Cast<ACharacter>(Pawn);
 		if (Character) { bIsInAir = Character->GetMovementComponent()->IsFalling(); }
