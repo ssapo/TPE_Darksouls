@@ -17,6 +17,27 @@ class TPE_API UTPE_AnimInstance : public UAnimInstance
 public:
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Montage")
+	bool PlayMontageAttack();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Montage")
+	bool StopMontageAttack();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Montage")
+	bool PlayMontageDash();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Montage")
+	bool StopMontageDash();
+
+	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
+	bool IsJumping() const { return IsInAir() || IsLanding(); }
+
+	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
+	void SetLanding(bool NewValue) { bLanding = NewValue; }
+
+	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
+	bool IsLanding() const { return bLanding; }
+
 	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
 	void SetStunned(bool NewValue) { bStunned = NewValue; }
 
@@ -65,6 +86,8 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
 	float CurrentRotationRate = 0.0f;
+
+	bool bLanding = true;
 
 	bool bStunned = false;
 

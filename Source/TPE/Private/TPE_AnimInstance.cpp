@@ -20,7 +20,7 @@ void UTPE_AnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		CurrentRotationRate = FMath::GetMappedRangeValueClamped(InputRange, OutputRange, Yaw);
 
 		auto Character = Cast<ACharacter>(Pawn);
-		if (Character) { bIsInAir = Character->GetMovementComponent()->IsFalling(); }
+		if (Character) { bIsInAir = !Character->GetMovementComponent()->IsMovingOnGround(); }
 	}
 }
 
