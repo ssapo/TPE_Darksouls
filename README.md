@@ -7,7 +7,7 @@ Video : <https://youtu.be/R4pQndIzbyc>
 
 
 
-![img](https://imgur.com/a/yDy817S)
+![img](https://i.imgur.com/BWFGq6w.png)
 
 
 Implemented features
