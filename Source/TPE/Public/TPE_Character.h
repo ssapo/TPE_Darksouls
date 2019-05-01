@@ -49,7 +49,12 @@ public:
 	class ATPE_Weapon* GetLeftWeapon() const { return LeftWeapon; }
 
 	UFUNCTION()
+	class ATPE_Weapon* CreateWeapon(class UClass* Class); 
+	UFUNCTION()
 	virtual void EquipWeapon(FName SocketName, class ATPE_Weapon* NewWeapon);
+
+	UFUNCTION()
+	virtual void UnEquipWeapon(class ATPE_Weapon* NewWeapon);
 
 	UFUNCTION()
 	void OnAttackMontageEnded(class UAnimMontage* Montage, bool bInterrupted);
@@ -63,11 +68,24 @@ public:
 	FOnAttackEndDelegate OnAttackEnd;
 
 protected:
+	
 	UFUNCTION(BlueprintCallable, Category = "Equip")
 	virtual void RightEquipWeapon(class ATPE_Weapon* Weapon);
 
 	UFUNCTION(BlueprintCallable, Category = "Equip")
 	virtual void LeftEquipWeapon(class ATPE_Weapon* Weapon);
+
+	UFUNCTION(BlueprintCallable, Category = "Equip")
+	virtual void RightUnEquipWeapon(class ATPE_Weapon* Weapon);
+
+	UFUNCTION(BlueprintCallable, Category = "Equip")
+	virtual void LeftUnEquipWeapon(class ATPE_Weapon* Weapon);
+
+	UFUNCTION(BlueprintCallable, Category = "Equip")
+	virtual void RightCreateWeaponAndEquip(class UClass* Class);
+
+	UFUNCTION(BlueprintCallable, Category = "Equip")
+	virtual void LeftCreateWeaponAndEquip(class UClass* Class);
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Stat, Meta = (AllowPrivateAccess = true))

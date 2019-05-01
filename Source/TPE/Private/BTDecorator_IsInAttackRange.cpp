@@ -23,6 +23,6 @@ bool UBTDecorator_IsInAttackRange::CalculateRawConditionValue(UBehaviorTreeCompo
 	if (nullptr == Target) { return false; }
 
 	auto Dist = Target->GetDistanceTo(ControllingCharacter);
-	bResult = (Dist <= 200.0f);
+	bResult = (Dist <= AttackRange);
 	return bResult;
 }

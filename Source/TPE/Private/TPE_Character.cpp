@@ -127,11 +127,21 @@ void ATPE_Character::Die()
 	}, 2.0f, false);
 }
 
+void ATPE_Character::UnEquipWeapon(ATPE_Weapon* Weapon)
+{
+	Weapon->DetachFromActor(FDetachmentTransformRules::KeepRelativeTransform);
+	Weapon->SetWeaponOwner(nullptr);
+}
+
 void ATPE_Character::EquipWeapon(FName SocketName, ATPE_Weapon* Weapon)
 {
 	Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::KeepRelative, true), SocketName);
-
 	Weapon->SetWeaponOwner(this);
+}
+
+ATPE_Weapon* ATPE_Character::CreateWeapon(UClass* Class)
+{
+	return GetWorld()->SpawnActor<ATPE_Weapon>(Class);
 }
 
 void ATPE_Character::RightEquipWeapon(ATPE_Weapon* Weapon)
@@ -144,4 +154,42 @@ void ATPE_Character::LeftEquipWeapon(ATPE_Weapon* Weapon)
 {
 	EquipWeapon(TEXT("socket_ik_hand_l"), Weapon);
 	LeftWeapon = Weapon;
+}
+
+void ATPE_Character::RightUnEquipWeapon(ATPE_Weapon* Weapon)
+{
+	UnEquipWeapon(Weapon);
+	RightWeapon = nullptr;
+}
+
+void ATPE_Character::LeftUnEquipWeapon(ATPE_Weapon* Weapon)
+{
+	UnEquipWeapon(Weapon);
+	LeftWeapon = nullptr;
+}
+
+void ATPE_Character::RightCreateWeaponAndEquip(class UClass* Class)
+{
+	auto weapon = CreateWeapon(Class);
+	if (weapon)
+	{
+		RightEquipWeapon(weapon);
+	}
+	else
+	{
+		TPE_PRINT(FColor::Green, TEXT("CreateWeapon is nullptr"));
+	}
+}
+
+void ATPE_Character::LeftCreateWeaponAndEquip(class UClass* Class)
+{
+	auto weapon = CreateWeapon(Class);
+	if (weapon)
+	{
+		LeftEquipWeapon(weapon);
+	}
+	else
+	{
+		TPE_PRINT(FColor::Green, TEXT("CreateWeapon is nullptr"));
+	}
 }
