@@ -7,23 +7,20 @@ Video : <https://youtu.be/R4pQndIzbyc>
 
 
 
-![img](https://imgur.com/ZhJ8VdJ.png)
+![img](https://i.imgur.com/BWFGq6w.png)
 
 
 Implemented features
 ====================
 Combat system
-- attack
-- combo attack
-- dash
-- dash attack
+- combat
 - lockon
 - follow camera to lockon target
 - rotating to lockon target when attack
 
 Equip weapon
 - static Equiped.. not dynamic
-- just twin blade.
+- twin blade, fist
 
 Simple AI
 - search around
@@ -33,3 +30,4 @@ Simple AI
 Used Asset
 - StarterContent
 - TwinSwordAnimSetBase
+- ActionRPG - Boss Spider 
