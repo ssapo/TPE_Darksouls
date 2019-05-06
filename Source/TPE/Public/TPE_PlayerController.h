@@ -17,6 +17,9 @@ class TPE_API ATPE_PlayerController : public APlayerController
 public:
 	ATPE_PlayerController();
 
+	virtual void OnPossess(APawn* aPawn) override;
+	//virtual void OnUnPossess() override;
+
 private:
 
 };

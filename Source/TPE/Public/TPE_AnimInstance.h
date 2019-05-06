@@ -7,85 +7,85 @@
 #include "TPE_AnimInstance.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class TPE_API UTPE_AnimInstance : public UAnimInstance
 {
 	GENERATED_BODY()
-	
+
 public:
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Montage")
-	bool PlayMontageAttack();
+		bool PlayMontageAttack();
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Montage")
-	bool StopMontageAttack();
+		bool StopMontageAttack();
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Montage")
-	bool PlayMontageDash();
+		bool PlayMontageDash();
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Montage")
-	bool StopMontageDash();
+		bool StopMontageDash();
 
 	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
-	bool IsJumping() const { return IsInAir() || IsLanding(); }
+		bool IsJumping() const { return IsInAir() || IsLanding(); }
 
 	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
-	void SetLanding(bool NewValue) { bLanding = NewValue; }
+		void SetLanding(bool NewValue) { bLanding = NewValue; }
 
 	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
-	bool IsLanding() const { return bLanding; }
+		bool IsLanding() const { return bLanding; }
 
 	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
-	void SetStunned(bool NewValue) { bStunned = NewValue; }
+		void SetStunAnim(bool NewValue) { bStunned = NewValue; }
 
 	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
-	bool IsStunned() const { return bStunned; }
+		bool IsStunned() const { return bStunned; }
 
 	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
-	void SetDeadAnim() { bIsDead = true; }
+		void SetDeadAnim(bool NewValue) { bIsDead = NewValue; }
 
 	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
-	bool IsDead() const { return bIsDead; }
+		bool IsDead() const { return bIsDead; }
 
 	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
-	void SetCanInturuptAttacking(bool NewValue) { bCanInturuptAttacking = NewValue; }
+		void SetCanInturuptAttacking(bool NewValue) { bCanInturuptAttacking = NewValue; }
 
 	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
-	bool CanInturuptAttacking() const { return bCanInturuptAttacking; }
+		bool CanInturuptAttacking() const { return bCanInturuptAttacking; }
 
 	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
-	void SetInAir(bool NewValue) { bIsInAir = NewValue; }
+		void SetInAir(bool NewValue) { bIsInAir = NewValue; }
 
 	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
-	bool IsInAir() const { return bIsInAir; }
+		bool IsInAir() const { return bIsInAir; }
 
 	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
-	void SetCanStopDash(bool NewValue) { bCanStopDash = NewValue; }
+		void SetCanStopDash(bool NewValue) { bCanStopDash = NewValue; }
 
 	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
-	bool CanStopDash() const { return bCanStopDash; }
+		bool CanStopDash() const { return bCanStopDash; }
 
 	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
-	void SetCanCombo(bool NewValue) { bCanCombo = NewValue; }
+		void SetCanCombo(bool NewValue) { bCanCombo = NewValue; }
 
 	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
-	bool CanCombo() const { return bCanCombo; }
+		bool CanCombo() const { return bCanCombo; }
 
 	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
-	void SetCanInturuptDash(bool NewValue) { bCanInturuptDash = NewValue; }
+		void SetCanInturuptDash(bool NewValue) { bCanInturuptDash = NewValue; }
 
 	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
-	bool CanInturuptDash() const { return bCanInturuptDash; }
+		bool CanInturuptDash() const { return bCanInturuptDash; }
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
-	float CurrentPawnSpeed = 0.0f;
+		float CurrentPawnSpeed = 0.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
-	float CurrentRotationRate = 0.0f;
+		float CurrentRotationRate = 0.0f;
 
 	bool bLanding = true;
 
@@ -96,7 +96,7 @@ private:
 	bool bCanInturuptAttacking = true;
 
 	bool bCanStopDash = true;
-	
+
 	bool bCanCombo = false;
 
 	bool bIsDead = false;

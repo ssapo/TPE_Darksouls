@@ -14,13 +14,6 @@ UTPECharacterStatComponent::UTPECharacterStatComponent()
 	Level = 1;
 }
 
-// Called when the game starts
-void UTPECharacterStatComponent::BeginPlay()
-{
-	Super::BeginPlay();
-	// ...
-}
-
 void UTPECharacterStatComponent::InitializeComponent()
 {
 	Super::InitializeComponent();
@@ -31,7 +24,6 @@ void UTPECharacterStatComponent::InitializeComponent()
 void UTPECharacterStatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	
 	AddStamina(10.0f * DeltaTime);
 }
 
@@ -47,6 +39,7 @@ void UTPECharacterStatComponent::SetNewLevel(int32 NewLevel)
 		Level = NewLevel;
 		SetHP(CurrentStatData->MaxHP);
 		SetStamina(CurrentStatData->MaxStamina);
+		SetStunBuildup(CurrentStatData->MaxStun);
 	}
 	else
 	{
@@ -72,9 +65,27 @@ void UTPECharacterStatComponent::SubStamina(float Value)
 	SetStamina(FMath::Clamp<float>(CurrentStamina - Value, 0.0f, CurrentStatData->MaxStamina));
 }
 
-void UTPECharacterStatComponent::SetHP(float NewHP)
+void UTPECharacterStatComponent::AddStunBuildup(float Value)
 {
-	CurrentHP = NewHP;
+	TPE_CHECK(nullptr != CurrentStatData);
+	SetStunBuildup(FMath::Clamp<float>(CurrentStunBuildup + Value, 0.0f, CurrentStatData->MaxStun));
+}
+
+void UTPECharacterStatComponent::SubStunBuildup(float Value)
+{
+	TPE_CHECK(nullptr != CurrentStatData);
+	SetStunBuildup(FMath::Clamp<float>(CurrentStunBuildup - Value, 0.0f, CurrentStatData->MaxStun));
+}
+
+void UTPECharacterStatComponent::SetMaxStunBuildup()
+{
+	TPE_CHECK(nullptr != CurrentStatData);
+	SetStunBuildup(CurrentStatData->MaxStun);
+}
+
+void UTPECharacterStatComponent::SetHP(float NewValue)
+{
+	CurrentHP = NewValue;
 	OnHPChanged.Broadcast();
 	if (CurrentHP < KINDA_SMALL_NUMBER)
 	{
@@ -83,14 +94,25 @@ void UTPECharacterStatComponent::SetHP(float NewHP)
 	}
 }
 
-void UTPECharacterStatComponent::SetStamina(float NewStamina)
+void UTPECharacterStatComponent::SetStamina(float NewValue)
 {
-	CurrentStamina = NewStamina;
+	CurrentStamina = NewValue;
 	OnStaminaChanged.Broadcast();
 	if (CurrentStamina < KINDA_SMALL_NUMBER)
 	{
 		CurrentStamina = 0.0f;
 		OnStaminaIsZero.Broadcast();
+	}
+}
+
+void UTPECharacterStatComponent::SetStunBuildup(float NewValue)
+{
+	CurrentStunBuildup = NewValue;
+	OnStunBuildupChanged.Broadcast();
+	if (CurrentStunBuildup < KINDA_SMALL_NUMBER)
+	{
+		CurrentStunBuildup = 0.0f;
+		OnStunBuildIsZero.Broadcast();
 	}
 }
 
@@ -127,4 +149,10 @@ float UTPECharacterStatComponent::GetMaxStamina() const
 {
 	TPE_CHECK(nullptr != CurrentStatData, 0.0f);
 	return (CurrentStatData->MaxStamina < KINDA_SMALL_NUMBER) ? 0.0f : CurrentStatData->MaxStamina;
+}
+
+float UTPECharacterStatComponent::GetMaxStunBuildup() const
+{
+	TPE_CHECK(nullptr != CurrentStatData, 0.0f);
+	return (CurrentStatData->MaxStun < KINDA_SMALL_NUMBER) ? 0.0f : CurrentStatData->MaxStun;
 }

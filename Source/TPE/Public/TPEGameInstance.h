@@ -8,7 +8,7 @@
 #include "TPEGameInstance.generated.h"
 
 /**
- * 
+ *
  */
 USTRUCT(BlueprintType)
 struct FTPECharacterData : public FTableRowBase
@@ -16,40 +16,43 @@ struct FTPECharacterData : public FTableRowBase
 	GENERATED_BODY()
 
 public:
-	FTPECharacterData() 
+	FTPECharacterData()
 		: Level(1)
 		, MaxHP(100.0f)
 		, MaxStamina(100.0f)
+		, MaxStun(100.0f)
 		, Attack(10.0f)
 		, DropExp(10)
 		, NextExp(30)
 	{}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
-	int32 Level;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
-	float MaxHP;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
-	float MaxStamina;
+		int32 Level;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
-	float Attack;
+		float MaxHP;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
-	int32 DropExp;
+		float MaxStamina;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
-	int32 NextExp;
+		float MaxStun;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+		float Attack;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+		int32 DropExp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+		int32 NextExp;
 };
 
 UCLASS()
 class TPE_API UTPEGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
-	
-	
+
 public:
 	UTPEGameInstance();
 
@@ -60,5 +63,5 @@ public:
 private:
 
 	UPROPERTY()
-	class UDataTable* TPECharacterTable;
+		class UDataTable* TPECharacterTable;
 };

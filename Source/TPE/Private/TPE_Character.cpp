@@ -9,7 +9,6 @@
 #include "TPE_Weapon.h"
 #include "TPE_RotatingComponent.h"
 
-// Sets default values
 ATPE_Character::ATPE_Character()
 {
 	CharacterStat = CreateDefaultSubobject<UTPECharacterStatComponent>(TEXT("CHARACTERSTAT"));
@@ -19,7 +18,7 @@ ATPE_Character::ATPE_Character()
 	StatBarWidget->SetupAttachment(GetMesh());
 	StatBarWidget->SetRelativeLocation(FVector(0.0f, 0.0f, 150.0f));
 	StatBarWidget->SetWidgetSpace(EWidgetSpace::Screen);
-	
+
 	static ConstructorHelpers::FClassFinder<UUserWidget> UI_STAT(TEXT("/Game/TPE/Blueprints/UI/UI_StatBar.UI_StatBar_C"));
 
 	if (UI_STAT.Succeeded())
@@ -45,12 +44,6 @@ ATPE_Character::ATPE_Character()
 	bDead = false;
 }
 
-// Called to bind functionality to input
-void ATPE_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-}
-
 void ATPE_Character::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
@@ -59,18 +52,20 @@ void ATPE_Character::PostInitializeComponents()
 
 	TPE_Anim->OnMontageEnded.AddDynamic(this, &ATPE_Character::OnAttackMontageEnded);
 
+	CharacterStat->OnStunBuildIsZero.AddUObject(this, &ATPE_Character::Stun);
 	CharacterStat->OnHPIsZero.AddUObject(this, &ATPE_Character::Die);
 }
 
-float ATPE_Character::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
+float ATPE_Character::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController * EventInstigator, AActor * DamageCauser)
 {
 	float FinalDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
 	CharacterStat->SetDamage(FinalDamage);
+	CharacterStat->SubStunBuildup(100.0f);
 	return FinalDamage;
 }
 
-void ATPE_Character::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted)
+void ATPE_Character::OnAttackMontageEnded(UAnimMontage * Montage, bool bInterrupted)
 {
 	OnAttackEnd.Broadcast();
 	OnAttackEnd.Clear();
@@ -80,10 +75,8 @@ void ATPE_Character::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupt
 void ATPE_Character::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	bool bPlayerControlled = IsPlayerControlled();
 
-	CharacterStat->SetNewLevel(bPlayerControlled ? 5 : 1);
+	bool bPlayerControlled = IsPlayerControlled();
 
 	if (bPlayerControlled)
 	{
@@ -114,61 +107,85 @@ void ATPE_Character::BeginPlay()
 
 void ATPE_Character::Die()
 {
-	TPE_CHECK(nullptr != TPE_Anim)
+	TPE_CHECK(nullptr != TPE_Anim);
 
 	bDead = true;
 
-	TPE_Anim->SetDeadAnim();
+	TPE_Anim->SetDeadAnim(true);
 	SetActorEnableCollision(false);
 
 	FTimerHandle UnusedHandle;
 	GetWorld()->GetTimerManager().SetTimer(UnusedHandle, [this]() {
 		StatBarWidget->SetVisibility(false);
-	}, 2.0f, false);
+		RightUnEquipWeapon();
+		LeftUnEquipWeapon();
+		}, 2.0f, false);
 }
 
-void ATPE_Character::UnEquipWeapon(ATPE_Weapon* Weapon)
+void ATPE_Character::Stun()
+{
+	TPE_CHECK(nullptr != TPE_Anim);
+	TPE_CHECK(nullptr != CharacterStat);
+
+	if (bStunned) { return; }
+
+	bStunned = true;
+	TPE_Anim->SetStunAnim(true);
+
+	FTimerHandle UnusedHandle;
+	GetWorld()->GetTimerManager().SetTimer(UnusedHandle, [this]() {
+		TPE_Anim->SetStunAnim(false);
+		bStunned = false;
+		CharacterStat->SetMaxStunBuildup();
+		}, 3.0f, false);
+}
+
+void ATPE_Character::UnEquipWeapon(ATPE_Weapon * Weapon)
 {
 	Weapon->DetachFromActor(FDetachmentTransformRules::KeepRelativeTransform);
 	Weapon->SetWeaponOwner(nullptr);
 }
 
-void ATPE_Character::EquipWeapon(FName SocketName, ATPE_Weapon* Weapon)
+void ATPE_Character::EquipWeapon(FName SocketName, ATPE_Weapon * Weapon)
 {
 	Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::KeepRelative, true), SocketName);
 	Weapon->SetWeaponOwner(this);
 }
 
-ATPE_Weapon* ATPE_Character::CreateWeapon(UClass* Class)
+ATPE_Weapon* ATPE_Character::CreateWeapon(UClass * Class)
 {
 	return GetWorld()->SpawnActor<ATPE_Weapon>(Class);
 }
 
-void ATPE_Character::RightEquipWeapon(ATPE_Weapon* Weapon)
+void ATPE_Character::RightEquipWeapon(ATPE_Weapon * Weapon)
 {
 	EquipWeapon(TEXT("socket_ik_hand_r"), Weapon);
 	RightWeapon = Weapon;
 }
 
-void ATPE_Character::LeftEquipWeapon(ATPE_Weapon* Weapon)
+void ATPE_Character::LeftEquipWeapon(ATPE_Weapon * Weapon)
 {
 	EquipWeapon(TEXT("socket_ik_hand_l"), Weapon);
 	LeftWeapon = Weapon;
 }
 
-void ATPE_Character::RightUnEquipWeapon(ATPE_Weapon* Weapon)
+void ATPE_Character::RightUnEquipWeapon()
 {
-	UnEquipWeapon(Weapon);
+	if (nullptr == RightWeapon) return;
+
+	UnEquipWeapon(RightWeapon);
 	RightWeapon = nullptr;
 }
 
-void ATPE_Character::LeftUnEquipWeapon(ATPE_Weapon* Weapon)
+void ATPE_Character::LeftUnEquipWeapon()
 {
-	UnEquipWeapon(Weapon);
+	if (nullptr == LeftWeapon) return;
+
+	UnEquipWeapon(LeftWeapon);
 	LeftWeapon = nullptr;
 }
 
-void ATPE_Character::RightCreateWeaponAndEquip(class UClass* Class)
+void ATPE_Character::RightCreateWeaponAndEquip(UClass * Class)
 {
 	auto weapon = CreateWeapon(Class);
 	if (weapon)
@@ -181,7 +198,7 @@ void ATPE_Character::RightCreateWeaponAndEquip(class UClass* Class)
 	}
 }
 
-void ATPE_Character::LeftCreateWeaponAndEquip(class UClass* Class)
+void ATPE_Character::LeftCreateWeaponAndEquip(UClass * Class)
 {
 	auto weapon = CreateWeapon(Class);
 	if (weapon)

@@ -18,9 +18,6 @@ public:
 	// Sets default values for this character's properties
 	ATPE_Character();
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
 	virtual void PostInitializeComponents() override;
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
@@ -31,80 +28,89 @@ protected:
 
 public:
 	UFUNCTION(BlueprintCallable, Category = "Status")
-	void Die();
+		void Die();
 
 	UFUNCTION(BlueprintCallable, Category = "Status")
-	bool IsDead() const { return bDead; }
-	
-	UFUNCTION(BlueprintCallable, Category = "UI")
-	UTPECharacterStatComponent* GetStatComponent() const { return CharacterStat; }
+		void Stun();
+
+	UFUNCTION(BlueprintCallable, Category = "Status")
+		bool IsDead() const { return bDead; }
+
+	UFUNCTION(BlueprintCallable, Category = "Status")
+		bool IsStunned() const { return bStunned; }
 
 	UFUNCTION(BlueprintCallable, Category = "UI")
-	class UWidgetComponent* GetWidgetComponent() const { return StatBarWidget; }
+		UTPECharacterStatComponent* GetStatComponent() const { return CharacterStat; }
+
+	UFUNCTION(BlueprintCallable, Category = "UI")
+		class UWidgetComponent* GetWidgetComponent() const { return StatBarWidget; }
 
 	UFUNCTION(BlueprintCallable, Category = "Equip")
-	class ATPE_Weapon* GetRightWeapon() const { return RightWeapon; }
+		class ATPE_Weapon* GetRightWeapon() const { return RightWeapon; }
 
 	UFUNCTION(BlueprintCallable, Category = "Equip")
-	class ATPE_Weapon* GetLeftWeapon() const { return LeftWeapon; }
+		class ATPE_Weapon* GetLeftWeapon() const { return LeftWeapon; }
 
 	UFUNCTION()
-	class ATPE_Weapon* CreateWeapon(class UClass* Class); 
-	UFUNCTION()
-	virtual void EquipWeapon(FName SocketName, class ATPE_Weapon* NewWeapon);
+		class ATPE_Weapon* CreateWeapon(class UClass* Class);
 
 	UFUNCTION()
-	virtual void UnEquipWeapon(class ATPE_Weapon* NewWeapon);
+		virtual void EquipWeapon(FName SocketName, class ATPE_Weapon* NewWeapon);
 
 	UFUNCTION()
-	void OnAttackMontageEnded(class UAnimMontage* Montage, bool bInterrupted);
+		virtual void UnEquipWeapon(class ATPE_Weapon* NewWeapon);
+
+	UFUNCTION()
+		void OnAttackMontageEnded(class UAnimMontage* Montage, bool bInterrupted);
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Dash")
-	void Dash();
+		void Dash();
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Attack")
-	void Attack();
+		void Attack();
 
 	FOnAttackEndDelegate OnAttackEnd;
 
 protected:
-	
-	UFUNCTION(BlueprintCallable, Category = "Equip")
-	virtual void RightEquipWeapon(class ATPE_Weapon* Weapon);
 
 	UFUNCTION(BlueprintCallable, Category = "Equip")
-	virtual void LeftEquipWeapon(class ATPE_Weapon* Weapon);
+		virtual void RightEquipWeapon(class ATPE_Weapon* Weapon);
 
 	UFUNCTION(BlueprintCallable, Category = "Equip")
-	virtual void RightUnEquipWeapon(class ATPE_Weapon* Weapon);
+		virtual void LeftEquipWeapon(class ATPE_Weapon* Weapon);
 
 	UFUNCTION(BlueprintCallable, Category = "Equip")
-	virtual void LeftUnEquipWeapon(class ATPE_Weapon* Weapon);
+		virtual void RightUnEquipWeapon();
 
 	UFUNCTION(BlueprintCallable, Category = "Equip")
-	virtual void RightCreateWeaponAndEquip(class UClass* Class);
+		virtual void LeftUnEquipWeapon();
 
 	UFUNCTION(BlueprintCallable, Category = "Equip")
-	virtual void LeftCreateWeaponAndEquip(class UClass* Class);
+		virtual void RightCreateWeaponAndEquip(class UClass* Class);
+
+	UFUNCTION(BlueprintCallable, Category = "Equip")
+		virtual void LeftCreateWeaponAndEquip(class UClass* Class);
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Stat, Meta = (AllowPrivateAccess = true))
-	class UTPECharacterStatComponent* CharacterStat;
-	
+		class UTPECharacterStatComponent* CharacterStat;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Pawn, Meta = (AllowPrivateAccess = true))
-	class UTPE_AnimInstance* TPE_Anim;
+		class UTPE_AnimInstance* TPE_Anim;
 
 	UPROPERTY(VisibleAnywhere, Category = UI)
-	class UWidgetComponent* StatBarWidget;
-	
+		class UWidgetComponent* StatBarWidget;
+
 	UPROPERTY(VisibleAnywhere, Category = UI)
-	class UWidgetComponent* OnScreenControls;
-	
-	UPROPERTY(VisibleAnywhere, Category = "Equip")
-	class ATPE_Weapon* RightWeapon;
+		class UWidgetComponent* OnScreenControls;
 
 	UPROPERTY(VisibleAnywhere, Category = "Equip")
-	class ATPE_Weapon* LeftWeapon;
+		class ATPE_Weapon* RightWeapon;
+
+	UPROPERTY(VisibleAnywhere, Category = "Equip")
+		class ATPE_Weapon* LeftWeapon;
 
 	bool bDead = false;
+
+	bool bStunned = false;
 };
