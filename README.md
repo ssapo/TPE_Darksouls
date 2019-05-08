@@ -19,8 +19,7 @@ Combat system
 - rotating to lockon target when attack
 
 Equip weapon
-- static Equiped.. not dynamic
-- twin blade, fist
+- twin blade, fist, spider's weapon
 
 Simple AI
 - search around
