@@ -61,7 +61,7 @@ float ATPE_Character::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	float FinalDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
 	CharacterStat->SetDamage(FinalDamage);
-	CharacterStat->SubStunBuildup(100.0f);
+	CharacterStat->SubStunBuildup(FinalDamage);
 	return FinalDamage;
 }
 
