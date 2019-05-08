@@ -70,7 +70,7 @@ void ATPE_Weapon::InitWeapon(UMeshComponent* NewWeaponBody, UPrimitiveComponent*
 	WeaponEffect = NewWeaponEffect;
 }
 
-void ATPE_Weapon::OverlapBegin_Implementation(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void ATPE_Weapon::OverlapBegin_Implementation(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
 	if (OtherActor->IsA(ATPE_Character::StaticClass()) && WeaponOwner != OtherActor)
 	{
@@ -94,7 +94,7 @@ void ATPE_Weapon::OverlapBegin_Implementation(UPrimitiveComponent* OverlappedCom
 	}
 }
 
-void ATPE_Weapon::OverlapEnd_Implementation(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+void ATPE_Weapon::OverlapEnd_Implementation(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex)
 {
 	if (OtherActor->IsA(ATPE_Character::StaticClass()) && WeaponOwner != OtherActor)
 	{
@@ -104,21 +104,21 @@ void ATPE_Weapon::OverlapEnd_Implementation(UPrimitiveComponent* OverlappedCompo
 			if (!WeaponOwner->IsPlayerControlled() == !OtherTPECharacter->IsPlayerControlled()) { return; }
 
 			if (OtherTPECharacter->bCanBeDamaged) { return; }
-			
+
 			FTimerHandle UnusedHandle;
 			GetWorld()->GetTimerManager().SetTimer(UnusedHandle, [=]() {
 				OtherActor->bCanBeDamaged = true;
-			}, AttackDelayTime, false);
+				}, AttackDelayTime, false);
 		}
 	}
 	else if (OtherActor->IsA(ATPE_Actor::StaticClass()) && !OtherActor->IsA(ATPE_Weapon::StaticClass()))
 	{
 		if (OtherActor->bCanBeDamaged) { return; }
-		
+
 		FTimerHandle UnusedHandle;
 		GetWorld()->GetTimerManager().SetTimer(UnusedHandle, [=]() {
 			OtherActor->bCanBeDamaged = true;
-		}, AttackDelayTime, false);
+			}, AttackDelayTime, false);
 	}
 
 }

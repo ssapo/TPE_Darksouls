@@ -10,65 +10,65 @@ UCLASS()
 class TPE_API ATPE_Weapon : public ATPE_Actor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	ATPE_Weapon();
 
 protected:
 	virtual void BeginPlay() override;
 
 private:
-	
-public:	
+
+public:
 	UFUNCTION(BlueprintCallable, Category = "Equip")
-	void SetWeaponOwner(class ATPE_Character* NewWaeponOwner);
-	
+		void SetWeaponOwner(class ATPE_Character* NewWaeponOwner);
+
 	UFUNCTION(BlueprintCallable, Category = "Equip")
-	class ATPE_Character* GetWeaponOwner() const;
+		class ATPE_Character* GetWeaponOwner() const;
 
 	UFUNCTION(BlueprintCallable, Category = "Attack")
-	void Attack();
+		void Attack();
 
 	UFUNCTION(BlueprintCallable, Category = "Attack")
-	void AttackEnd();
-	
+		void AttackEnd();
+
 	UFUNCTION(BlueprintCallable, Category = "Attack")
-	void BeginTrail();
-	
+		void BeginTrail();
+
 	UFUNCTION(BlueprintCallable, Category = "Attack")
-	void EndTrail();
+		void EndTrail();
 
 protected:
 
 	UFUNCTION(BlueprintCallable, Category = "Equip")
-	void InitWeapon(class UMeshComponent* NewWeaponBody, class UPrimitiveComponent* WeaponCollision, class UParticleSystemComponent* WeaponEffect);
+		void InitWeapon(class UMeshComponent* NewWeaponBody, class UPrimitiveComponent* WeaponCollision, class UParticleSystemComponent* WeaponEffect);
 
 	UFUNCTION(BlueprintNativeEvent)
-	void OverlapBegin(class UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+		void OverlapBegin(class UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 	void OverlapBegin_Implementation(class UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-	
+
 	UFUNCTION(BlueprintNativeEvent)
-	void OverlapEnd(class UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+		void OverlapEnd(class UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 	void OverlapEnd_Implementation(class UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 private:
 
 	UPROPERTY()
-	class ATPE_Character* WeaponOwner;
+		class ATPE_Character* WeaponOwner;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equip", Meta = (AllowPrivateAccess = true))
-	class UPrimitiveComponent* WeaponCollision;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equip", Meta = (AllowPrivateAccess = true))
-	class UMeshComponent* WeaponBody;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equip", Meta = (AllowPrivateAccess = true))
-	class UParticleSystemComponent* WeaponEffect;
+		class UPrimitiveComponent* WeaponCollision;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = true))
-	float TrailInWidth = 1.5f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equip", Meta = (AllowPrivateAccess = true))
+		class UMeshComponent* WeaponBody;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equip", Meta = (AllowPrivateAccess = true))
+		class UParticleSystemComponent* WeaponEffect;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = true))
-	float AttackDelayTime = 0.2f;
+		float TrailInWidth = 1.5f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = true))
+		float AttackDelayTime = 0.2f;
 
 };
