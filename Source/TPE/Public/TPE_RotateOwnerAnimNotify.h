@@ -7,7 +7,7 @@
 #include "TPE_RotateOwnerAnimNotify.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class TPE_API UTPE_RotateOwnerAnimNotify : public UAnimNotify
@@ -16,12 +16,12 @@ class TPE_API UTPE_RotateOwnerAnimNotify : public UAnimNotify
 
 public:
 	virtual void Notify(class USkeletalMeshComponent* MeshComp, class UAnimSequenceBase* Animation) override;
-	
+
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
-	float MaxDegreesPerSecond;
+		float MaxDegreesPerSecond;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
-	float MaxPossibleRotation;
+		float MaxPossibleRotation;
 };

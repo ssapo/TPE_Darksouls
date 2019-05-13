@@ -91,6 +91,9 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Equip")
 		virtual void LeftCreateWeaponAndEquip(class UClass* Class);
 
+	UFUNCTION(BlueprintCallable, Category = "Equip")
+		FString GetSocketNameByWeaponType(int WeaponType);
+
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Stat, Meta = (AllowPrivateAccess = true))
 		class UTPECharacterStatComponent* CharacterStat;

@@ -14,14 +14,13 @@ class UTPE_Rotating : public UInterface
 };
 
 /**
- * 
+ *
  */
 class TPE_API ITPE_Rotating
 {
 	GENERATED_BODY()
 
-	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "Rotating")
-	FRotator GetDesiredRotation() const;
+		FRotator GetDesiredRotation() const;
 };

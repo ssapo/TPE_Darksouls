@@ -7,7 +7,7 @@
 #include "TPE_GameMode.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class TPE_API ATPE_GameMode : public AGameMode

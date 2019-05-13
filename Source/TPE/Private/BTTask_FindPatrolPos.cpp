@@ -16,13 +16,13 @@ EBTNodeResult::Type UBTTask_FindPatrolPos::ExecuteTask(UBehaviorTreeComponent& O
 	EBTNodeResult::Type Result = Super::ExecuteTask(OwnerComp, NodeMemory);
 
 	auto ControllingPawn = Cast<ATPE_Character>(OwnerComp.GetAIOwner()->GetPawn());
-	if (nullptr == ControllingPawn || true == ControllingPawn->IsDead() ) { return EBTNodeResult::Failed; }
+	if (nullptr == ControllingPawn || true == ControllingPawn->IsDead()) { return EBTNodeResult::Failed; }
 
 	auto NavSystem = UNavigationSystemV1::GetNavigationSystem(ControllingPawn->GetWorld());
 	if (nullptr == NavSystem) { return EBTNodeResult::Failed; }
 
 	auto Origin = OwnerComp.GetBlackboardComponent()->GetValueAsVector(ATPE_AIController::HomePosKey);
-	
+
 	FNavLocation NextPatrol;
 	if (NavSystem->GetRandomPointInNavigableRadius(Origin, 1000.0f, NextPatrol))
 	{

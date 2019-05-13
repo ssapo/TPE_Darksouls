@@ -159,14 +159,27 @@ ATPE_Weapon* ATPE_Character::CreateWeapon(UClass * Class)
 
 void ATPE_Character::RightEquipWeapon(ATPE_Weapon * Weapon)
 {
-	EquipWeapon(TEXT("socket_ik_hand_r"), Weapon);
+	EquipWeapon(*FString(GetSocketNameByWeaponType(Weapon->GetType()) + TEXT("_right")), Weapon);
 	RightWeapon = Weapon;
 }
 
 void ATPE_Character::LeftEquipWeapon(ATPE_Weapon * Weapon)
 {
-	EquipWeapon(TEXT("socket_ik_hand_l"), Weapon);
+	EquipWeapon(*FString(GetSocketNameByWeaponType(Weapon->GetType()) + TEXT("_left")), Weapon);
 	LeftWeapon = Weapon;
+}
+
+FString ATPE_Character::GetSocketNameByWeaponType(int WeaponType)
+{
+	switch (WeaponType)
+	{
+	case 1:
+		return "sword";
+	case 2:
+		return "shield";
+	default:
+		return "Fist";
+	}
 }
 
 void ATPE_Character::RightUnEquipWeapon()

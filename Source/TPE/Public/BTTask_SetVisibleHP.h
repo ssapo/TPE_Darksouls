@@ -7,7 +7,7 @@
 #include "BTTask_SetVisibleHP.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class TPE_API UBTTask_SetVisibleHP : public UBTTaskNode

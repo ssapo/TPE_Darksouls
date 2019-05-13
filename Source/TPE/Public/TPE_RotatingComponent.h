@@ -9,12 +9,12 @@
 //DECLARE_MULTICAST_DELEGATE(FOnRotatingStart);
 //DECLARE_MULTICAST_DELEGATE(FOnRotatingEnd);
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class TPE_API UTPE_RotatingComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:	
+public:
 	UTPE_RotatingComponent();
 
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
@@ -22,7 +22,7 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	void StartRotatingWithLimit(float NewMaxPossibleRotation, float NewMaxDegreesPerSecond);
 
 	void StartRotatingWithTime(float NewTime, float NewMaxDegreesPerSecond);
@@ -31,17 +31,17 @@ public:
 
 private:
 	UPROPERTY(VisibleAnywhere)
-	float TimeElapsed;
+		float TimeElapsed;
 
 	UPROPERTY(VisibleAnywhere)
-	float RotateTime;
+		float RotateTime;
 
 	UPROPERTY(VisibleAnywhere)
-	float MaxDegreesPerSecond;
+		float MaxDegreesPerSecond;
 
 	UPROPERTY(VisibleAnywhere)
-	float MaxAllowedDegrees;
+		float MaxAllowedDegrees;
 
 	UPROPERTY(VisibleAnywhere)
-	bool bShouldRotate;
+		bool bShouldRotate;
 };

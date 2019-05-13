@@ -26,6 +26,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Equip")
 		class ATPE_Character* GetWeaponOwner() const;
 
+	UFUNCTION(BlueprintCallable, Category = "Equip")
+		int GetType() const { return WeaponType; }
+
 	UFUNCTION(BlueprintCallable, Category = "Attack")
 		void Attack();
 
@@ -65,10 +68,12 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equip", Meta = (AllowPrivateAccess = true))
 		class UParticleSystemComponent* WeaponEffect;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equip", Meta = (AllowPrivateAccess = true))
+		int WeaponType = 0;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = true))
 		float TrailInWidth = 1.5f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = true))
 		float AttackDelayTime = 0.2f;
-
 };

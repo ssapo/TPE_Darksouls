@@ -7,7 +7,7 @@
 #include "BTDecorator_IsInAttackRange.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class TPE_API UBTDecorator_IsInAttackRange : public UBTDecorator
@@ -19,8 +19,8 @@ public:
 
 protected:
 	virtual bool CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const override;
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess = true))
-	float AttackRange = 500.0f;
+		float AttackRange = 500.0f;
 
 };

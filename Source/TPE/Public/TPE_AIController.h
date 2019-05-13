@@ -7,13 +7,13 @@
 #include "TPE_AIController.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class TPE_API ATPE_AIController : public AAIController
 {
 	GENERATED_BODY()
-	
+
 public:
 	ATPE_AIController();
 
@@ -27,8 +27,8 @@ public:
 
 private:
 	UPROPERTY()
-	class UBehaviorTree* BTAsset;
+		class UBehaviorTree* BTAsset;
 
 	UPROPERTY()
-	class UBlackboardData* BBAsset;
+		class UBlackboardData* BBAsset;
 };

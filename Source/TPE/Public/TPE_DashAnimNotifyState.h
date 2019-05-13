@@ -7,7 +7,7 @@
 #include "TPE_DashAnimNotifyState.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class TPE_API UTPE_DashAnimNotifyState : public UAnimNotifyState
