@@ -7,16 +7,16 @@
 #include "TPE_PlayerHUD.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS(BlueprintType)
 class TPE_API ATPE_PlayerHUD : public AHUD
 {
 	GENERATED_BODY()
-	
+
 public:
 	ATPE_PlayerHUD();
 
 
-	
+
 };

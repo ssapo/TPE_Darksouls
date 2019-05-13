@@ -16,7 +16,7 @@ UBTTask_SetVisibleHP::UBTTask_SetVisibleHP()
 EBTNodeResult::Type UBTTask_SetVisibleHP::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	EBTNodeResult::Type Result = Super::ExecuteTask(OwnerComp, NodeMemory);
-	
+
 	auto TPECharacter = Cast<ATPE_Character>(OwnerComp.GetAIOwner()->GetPawn());
 	if (!TPECharacter) { return EBTNodeResult::Failed; }
 

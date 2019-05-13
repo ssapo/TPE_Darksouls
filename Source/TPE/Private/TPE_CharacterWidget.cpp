@@ -26,7 +26,7 @@ void UTPE_CharacterWidget::BindCharacterStat(UTPECharacterStatComponent* NewChar
 	auto HPCanvasPanelSlot = Cast<UCanvasPanelSlot>(HPScaleBox->Slot);
 	TPE_CHECK(nullptr != HPCanvasPanelSlot);
 
-	HPCanvasPanelSlot->SetSize(bPlayer ? FVector2D(CurrentCharacterStat->GetMaxHP()/2.0f, 10.0f) : FVector2D(300.0f, 10.0f));
+	HPCanvasPanelSlot->SetSize(bPlayer ? FVector2D(CurrentCharacterStat->GetMaxHP() / 2.0f, 10.0f) : FVector2D(300.0f, 10.0f));
 
 	UpdateHPWidget();
 	UpdateStaminaWidget();
@@ -43,7 +43,7 @@ void UTPE_CharacterWidget::NativeConstruct()
 	TPE_CHECK(nullptr != HPBackProgressBar);
 
 	HPBackProgressBar->SetPercent(1.0f);
-	
+
 	UpdateHPWidget();
 
 	StaminaProgressBar = Cast<UProgressBar>(GetWidgetFromName(TEXT("PB_StaminaBar")));
@@ -53,11 +53,11 @@ void UTPE_CharacterWidget::NativeConstruct()
 	TPE_CHECK(nullptr != StaminaBackProgressBar);
 
 	StaminaBackProgressBar->SetPercent(1.0f);
-	
+
 	UpdateStaminaWidget();
 }
 
-void UTPE_CharacterWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
+void UTPE_CharacterWidget::NativeTick(const FGeometry & MyGeometry, float InDeltaTime)
 {
 	if (HPProgressBar && HPProgressBar->IsVisible())
 	{
@@ -108,7 +108,7 @@ void UTPE_CharacterWidget::UpdateStaminaWidget()
 	}
 }
 
-void UTPE_CharacterWidget::UpdateBackWidget(UProgressBar* BackProgressBar, float FrontProgressBarPercent, float InDeltaTime)
+void UTPE_CharacterWidget::UpdateBackWidget(UProgressBar * BackProgressBar, float FrontProgressBarPercent, float InDeltaTime)
 {
 	if (nullptr == BackProgressBar) { return; }
 

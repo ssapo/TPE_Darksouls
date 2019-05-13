@@ -6,13 +6,11 @@
 #include "TPE_Character.h"
 //#include "GameFramework/AController.h"
 
-// Sets default values
 ATPE_Weapon::ATPE_Weapon()
 {
 	PrimaryActorTick.bCanEverTick = false;
 }
 
-// Called when the game starts or when spawned
 void ATPE_Weapon::BeginPlay()
 {
 	Super::BeginPlay();
@@ -47,14 +45,22 @@ void ATPE_Weapon::AttackEnd()
 
 void ATPE_Weapon::BeginTrail()
 {
-	if (false == WeaponEffect) { return; }
+	if (false == WeaponEffect) 
+	{ 
+		TPE_PRINT(FColor::Blue, TEXT("WeaponEffect is nullptr"));
+		return; 
+	}
 
 	WeaponEffect->BeginTrails(TEXT("trail_socket_start"), TEXT("trail_socket_end"), ETrailWidthMode::ETrailWidthMode_FromCentre, TrailInWidth);
 }
 
 void ATPE_Weapon::EndTrail()
 {
-	if (false == WeaponEffect) { return; }
+	if (false == WeaponEffect) 
+	{
+		TPE_PRINT(FColor::Blue, TEXT("WeaponEffect is nullptr"));
+		return;
+	}
 
 	WeaponEffect->EndTrails();
 }

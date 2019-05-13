@@ -7,13 +7,13 @@
 #include "TPE_CharacterWidget.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class TPE_API UTPE_CharacterWidget : public UUserWidget
 {
 	GENERATED_BODY()
-	
+
 public:
 	void BindCharacterStat(class UTPECharacterStatComponent* NewCharacterStat, bool bPlayer);
 
@@ -30,16 +30,16 @@ protected:
 
 private:
 	TWeakObjectPtr<class UTPECharacterStatComponent> CurrentCharacterStat;
-	
-	UPROPERTY()
-	class UProgressBar* HPProgressBar;
-	
-	UPROPERTY()
-	class UProgressBar* HPBackProgressBar;
 
 	UPROPERTY()
-	class UProgressBar* StaminaProgressBar;
-	
+		class UProgressBar* HPProgressBar;
+
 	UPROPERTY()
-	class UProgressBar* StaminaBackProgressBar;
+		class UProgressBar* HPBackProgressBar;
+
+	UPROPERTY()
+		class UProgressBar* StaminaProgressBar;
+
+	UPROPERTY()
+		class UProgressBar* StaminaBackProgressBar;
 };

@@ -7,13 +7,13 @@
 #include "TPE_AttackingAnimNotifyState.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class TPE_API UTPE_AttackingAnimNotifyState : public UAnimNotifyState
 {
 	GENERATED_BODY()
-	
+
 public:
 	virtual void NotifyBegin(class USkeletalMeshComponent* MeshComp, class UAnimSequenceBase* Animation, float TotalDuration) override;
 	virtual void NotifyEnd(class USkeletalMeshComponent* MeshComp, class UAnimSequenceBase* Animation) override;

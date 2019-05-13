@@ -7,13 +7,13 @@
 #include "BTTask_Attack.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class TPE_API UBTTask_Attack : public UBTTaskNode
 {
 	GENERATED_BODY()
-	
+
 public:
 	UBTTask_Attack();
 

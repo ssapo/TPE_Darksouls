@@ -4,4 +4,4 @@
 #include "Modules/ModuleManager.h"
 
 DEFINE_LOG_CATEGORY(TPE);
-IMPLEMENT_PRIMARY_GAME_MODULE( FDefaultGameModuleImpl, TPE, "TPE" );
+IMPLEMENT_PRIMARY_GAME_MODULE(FDefaultGameModuleImpl, TPE, "TPE");

@@ -15,7 +15,7 @@ UBTService_Detect::UBTService_Detect()
 void UBTService_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
-	
+
 	OwnerComp.GetBlackboardComponent()->SetValueAsObject(ATPE_AIController::TargetKey, nullptr);
 
 	auto ControllingPawn = Cast<ATPE_Character>(OwnerComp.GetAIOwner()->GetPawn());
@@ -26,7 +26,7 @@ void UBTService_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 	auto DetectRadius = 2000.0f;
 
 	if (nullptr == World) { return; }
-	
+
 	TArray<FOverlapResult> OverlapResults;
 	FCollisionQueryParams CollisionQueryParam(NAME_None, false, ControllingPawn);
 	auto bResult = World->OverlapMultiByChannel(
@@ -43,7 +43,7 @@ void UBTService_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 		for (auto OverlapResult : OverlapResults)
 		{
 			auto Character = Cast<ATPE_Character>(OverlapResult.GetActor());
-			
+
 			if (Character && Character->GetController()->IsPlayerController())
 			{
 				OwnerComp.GetBlackboardComponent()->SetValueAsObject(ATPE_AIController::TargetKey, Character);
@@ -52,7 +52,7 @@ void UBTService_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 
 				DrawDebugPoint(World, Character->GetActorLocation(), 10.0f, FColor::Blue, false, 0.2f);
 				DrawDebugLine(World, ControllingPawn->GetActorLocation(), Character->GetActorLocation(), FColor::Blue, false, 2.0f);
-				
+
 				return;
 			}
 		}

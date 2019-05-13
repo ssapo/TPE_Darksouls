@@ -7,7 +7,7 @@
 #include "BTService_Detect.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class TPE_API UBTService_Detect : public UBTService
