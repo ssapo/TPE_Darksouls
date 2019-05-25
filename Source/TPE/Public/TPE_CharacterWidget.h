@@ -48,9 +48,10 @@ private:
 	UPROPERTY()
 		class UMultiLineEditableText* DamageEditableText;
 
+	FTimerHandle TimerHandle;
+
 	int32 HPDamaged = 0;
 
 	bool bDamagedVisiblity = false;
 
-	FTimerHandle TimerHandle;
 };
