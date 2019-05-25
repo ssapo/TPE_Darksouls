@@ -18,7 +18,7 @@ ATPE_Character::ATPE_Character()
 	StatBarWidget->SetupAttachment(GetMesh());
 	StatBarWidget->SetRelativeLocation(FVector(0.0f, 0.0f, 150.0f));
 	StatBarWidget->SetWidgetSpace(EWidgetSpace::Screen);
-
+	
 	static ConstructorHelpers::FClassFinder<UUserWidget> UI_STAT(TEXT("/Game/TPE/Blueprints/UI/UI_StatBar.UI_StatBar_C"));
 
 	if (UI_STAT.Succeeded())

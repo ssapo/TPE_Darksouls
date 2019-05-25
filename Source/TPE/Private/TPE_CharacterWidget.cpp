@@ -6,6 +6,7 @@
 #include "Components/ScaleBox.h"
 #include "Components/CanvasPanel.h"
 #include "Components/CanvasPanelSlot.h"
+#include "Components/MultiLineEditableText.h"
 
 void UTPE_CharacterWidget::BindCharacterStat(UTPECharacterStatComponent* NewCharacterStat, bool bPlayer)
 {
@@ -13,6 +14,7 @@ void UTPE_CharacterWidget::BindCharacterStat(UTPECharacterStatComponent* NewChar
 
 	CurrentCharacterStat = NewCharacterStat;
 	CurrentCharacterStat->OnHPChanged.AddUObject(this, &UTPE_CharacterWidget::UpdateHPWidget);
+	CurrentCharacterStat->OnHPDamaged.AddUObject(this, &UTPE_CharacterWidget::UpdateDamageWidget);
 	CurrentCharacterStat->OnStaminaChanged.AddUObject(this, &UTPE_CharacterWidget::UpdateStaminaWidget);
 
 	auto StaminaCanvasPanel = Cast<UCanvasPanel>(GetWidgetFromName(TEXT("CP_Stamina")));
@@ -55,6 +57,11 @@ void UTPE_CharacterWidget::NativeConstruct()
 	StaminaBackProgressBar->SetPercent(1.0f);
 
 	UpdateStaminaWidget();
+
+	DamageEditableText = Cast<UMultiLineEditableText>(GetWidgetFromName(TEXT("TB_DMG")));
+	TPE_CHECK(nullptr != DamageEditableText);
+
+	DamageEditableText->SetVisibility(ESlateVisibility::Hidden);
 }
 
 void UTPE_CharacterWidget::NativeTick(const FGeometry & MyGeometry, float InDeltaTime)
@@ -67,6 +74,37 @@ void UTPE_CharacterWidget::NativeTick(const FGeometry & MyGeometry, float InDelt
 	if (StaminaProgressBar && StaminaProgressBar->IsVisible())
 	{
 		UpdateBackWidget(StaminaBackProgressBar, StaminaProgressBar->Percent, InDeltaTime);
+	}
+}
+
+void UTPE_CharacterWidget::UpdateDamageWidget(int32 NewDamaged)
+{
+	if (0 == NewDamaged)
+		return;
+
+	if (CurrentCharacterStat.IsValid())
+	{
+		if (nullptr != DamageEditableText)
+		{
+			DamageEditableText->SetVisibility(ESlateVisibility::Visible);
+
+			HPDamaged += NewDamaged;
+
+			DamageEditableText->SetText(FText::FromString(FString::FromInt(HPDamaged)));
+
+			GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+			GetWorld()->GetTimerManager().SetTimer(TimerHandle, [this]()
+				{
+					if (nullptr != DamageEditableText)
+					{
+						HPDamaged = 0;
+						DamageEditableText->SetVisibility(ESlateVisibility::Hidden);
+					}
+					bDamagedVisiblity = false;
+				}, 2.5f, false);
+
+			bDamagedVisiblity = true;
+		}
 	}
 }
 
