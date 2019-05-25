@@ -76,4 +76,7 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = true))
 		float AttackDelayTime = 0.2f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = true))
+		float AttackDamage = 30.0f;
 };

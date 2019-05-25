@@ -87,7 +87,7 @@ void ATPE_Weapon::OverlapBegin_Implementation(UPrimitiveComponent * OverlappedCo
 
 			if (!OtherTPECharacter->bCanBeDamaged) { return; }
 
-			OtherTPECharacter->TakeDamage(30.0f, FDamageEvent(), WeaponOwner->GetController(), this);
+			OtherTPECharacter->TakeDamage(AttackDamage, FDamageEvent(), WeaponOwner->GetController(), this);
 			OtherTPECharacter->bCanBeDamaged = false;
 		}
 	}
@@ -95,7 +95,7 @@ void ATPE_Weapon::OverlapBegin_Implementation(UPrimitiveComponent * OverlappedCo
 	{
 		if (!OtherActor->bCanBeDamaged) { return; }
 
-		OtherActor->TakeDamage(30.0f, FDamageEvent(), WeaponOwner->GetController(), this);
+		OtherActor->TakeDamage(AttackDamage, FDamageEvent(), WeaponOwner->GetController(), this);
 		OtherActor->bCanBeDamaged = false;
 	}
 }

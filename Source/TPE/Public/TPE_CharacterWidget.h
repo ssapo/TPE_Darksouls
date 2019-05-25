@@ -24,6 +24,8 @@ protected:
 
 	void UpdateHPWidget();
 
+	void UpdateDamageWidget(int32 NewDamaged);
+
 	void UpdateStaminaWidget();
 
 	void UpdateBackWidget(class UProgressBar* BackProgressBar, float FrontProgressBarPercent, float InDeltaTime);
@@ -42,4 +44,13 @@ private:
 
 	UPROPERTY()
 		class UProgressBar* StaminaBackProgressBar;
+
+	UPROPERTY()
+		class UMultiLineEditableText* DamageEditableText;
+
+	int32 HPDamaged = 0;
+
+	bool bDamagedVisiblity = false;
+
+	FTimerHandle TimerHandle;
 };

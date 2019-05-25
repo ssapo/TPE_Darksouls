@@ -12,6 +12,7 @@ UTPECharacterStatComponent::UTPECharacterStatComponent()
 	bWantsInitializeComponent = true;
 
 	Level = 1;
+	Damaged = 0;
 }
 
 void UTPECharacterStatComponent::InitializeComponent()
@@ -37,7 +38,7 @@ void UTPECharacterStatComponent::SetNewLevel(int32 NewLevel)
 	if (nullptr != CurrentStatData)
 	{
 		Level = NewLevel;
-		SetHP(CurrentStatData->MaxHP);
+		SetHP(CurrentStatData->MaxHP, 0);
 		SetStamina(CurrentStatData->MaxStamina);
 		SetStunBuildup(CurrentStatData->MaxStun);
 	}
@@ -50,7 +51,7 @@ void UTPECharacterStatComponent::SetNewLevel(int32 NewLevel)
 void UTPECharacterStatComponent::SetDamage(int32 NewDamage)
 {
 	TPE_CHECK(nullptr != CurrentStatData);
-	SetHP(FMath::Clamp<float>(CurrentHP - NewDamage, 0.0f, CurrentStatData->MaxHP));
+	SetHP(FMath::Clamp<float>(CurrentHP - NewDamage, 0.0f, CurrentStatData->MaxHP), FMath::Min<int32>(CurrentHP, NewDamage));
 }
 
 void UTPECharacterStatComponent::AddStamina(float Value)
@@ -83,7 +84,7 @@ void UTPECharacterStatComponent::SetMaxStunBuildup()
 	SetStunBuildup(CurrentStatData->MaxStun);
 }
 
-void UTPECharacterStatComponent::SetHP(float NewValue)
+void UTPECharacterStatComponent::SetHP(float NewValue, int32 HPDamaged)
 {
 	CurrentHP = NewValue;
 	OnHPChanged.Broadcast();
@@ -92,6 +93,7 @@ void UTPECharacterStatComponent::SetHP(float NewValue)
 		CurrentHP = 0.0f;
 		OnHPIsZero.Broadcast();
 	}
+	OnHPDamaged.Broadcast(HPDamaged);
 }
 
 void UTPECharacterStatComponent::SetStamina(float NewValue)

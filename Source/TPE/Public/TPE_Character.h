@@ -102,10 +102,10 @@ private:
 		class UTPE_AnimInstance* TPE_Anim;
 
 	UPROPERTY(VisibleAnywhere, Category = UI)
-		class UWidgetComponent* StatBarWidget;
+		class UWidgetComponent* OnScreenControls;
 
 	UPROPERTY(VisibleAnywhere, Category = UI)
-		class UWidgetComponent* OnScreenControls;
+		class UWidgetComponent* StatBarWidget;
 
 	UPROPERTY(VisibleAnywhere, Category = "Equip")
 		class ATPE_Weapon* RightWeapon;

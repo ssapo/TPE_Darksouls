@@ -7,6 +7,7 @@
 #include "TPECharacterStatComponent.generated.h"
 
 DECLARE_MULTICAST_DELEGATE(FOnHPIsZeroDelegate)
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnHPDamagedDelegate, int32)
 DECLARE_MULTICAST_DELEGATE(FOnHPChangedDelegate)
 DECLARE_MULTICAST_DELEGATE(FOnStaminaZeroDelegate)
 DECLARE_MULTICAST_DELEGATE(FOnStaminaChangedDelegate)
@@ -35,7 +36,7 @@ public:
 		void SetDamage(int32 NewDamage);
 
 	UFUNCTION(BlueprintCallable, Category = Stat)
-		void SetHP(float NewHP);
+		void SetHP(float NewHP, int32 HPDamaged);
 
 	UFUNCTION(BlueprintCallable, Category = Stat)
 		float GetHPRatio() const;
@@ -82,6 +83,8 @@ public:
 public:
 	FOnHPIsZeroDelegate OnHPIsZero;
 
+	FOnHPDamagedDelegate OnHPDamaged;
+
 	FOnHPChangedDelegate OnHPChanged;
 
 	FOnStaminaZeroDelegate OnStaminaIsZero;
@@ -97,6 +100,9 @@ private:
 
 	UPROPERTY(EditInstanceOnly, Category = Stat, Meta = (AllowPrivateAccess = true))
 		int32 Level;
+
+	UPROPERTY(Transient, VisibleInstanceOnly, Category = Stat, Meta = (AllowPrivateAccess = true))
+		int32 Damaged;
 
 	UPROPERTY(Transient, VisibleInstanceOnly, Category = Stat, Meta = (AllowPrivateAccess = true))
 		float CurrentHP;
