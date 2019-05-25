@@ -3,6 +3,7 @@
 #pragma once
 
 #include "TPE.h"
+#include "Containers/Map.h"
 #include "TPE_Actor.h"
 #include "TPE_Weapon.generated.h"
 
@@ -41,6 +42,15 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Attack")
 		void EndTrail();
 
+	UFUNCTION(BlueprintCallable, Category = "Attack")
+		void SetCollisionOn();
+
+	UFUNCTION(BlueprintCallable, Category = "Attack")
+		void SetCollisionOff();
+
+	UFUNCTION(BlueprintCallable, Category = "Attack")
+		void ResetAttackList();
+
 protected:
 
 	UFUNCTION(BlueprintCallable, Category = "Equip")
@@ -54,6 +64,7 @@ protected:
 		void OverlapEnd(class UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 	void OverlapEnd_Implementation(class UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
+	
 private:
 
 	UPROPERTY()
@@ -79,4 +90,6 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = true))
 		float AttackDamage = 30.0f;
+
+	TMap<TWeakObjectPtr<AActor>, bool> AlreadyAttackList;
 };
