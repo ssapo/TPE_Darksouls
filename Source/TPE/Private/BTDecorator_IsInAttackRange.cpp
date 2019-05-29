@@ -5,6 +5,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "TPE_Character.h"
 #include "TPE_AIController.h"
+#include "TPE_Math.h"
 
 UBTDecorator_IsInAttackRange::UBTDecorator_IsInAttackRange()
 {
@@ -23,6 +24,6 @@ bool UBTDecorator_IsInAttackRange::CalculateRawConditionValue(UBehaviorTreeCompo
 	if (nullptr == Target) { return false; }
 
 	auto Dist = Target->GetDistanceTo(ControllingCharacter);
-	bResult = (Dist <= AttackRange);
+	bResult = UKismetMathLibrary::InRange_FloatFloat(Dist, MinAttackRange, MaxAttackRange, true, true);
 	return bResult;
 }
