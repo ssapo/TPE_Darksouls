@@ -207,7 +207,7 @@ void ATPE_Character::RightCreateWeaponAndEquip(UClass * Class)
 	}
 	else
 	{
-		TPE_PRINT(FColor::Green, TEXT("CreateWeapon is nullptr"));
+		TPE_PRINT(TEXT("CreateWeapon is nullptr"));
 	}
 }
 
@@ -220,6 +220,6 @@ void ATPE_Character::LeftCreateWeaponAndEquip(UClass * Class)
 	}
 	else
 	{
-		TPE_PRINT(FColor::Green, TEXT("CreateWeapon is nullptr"));
+		TPE_PRINT(TEXT("CreateWeapon is nullptr"));
 	}
 }
