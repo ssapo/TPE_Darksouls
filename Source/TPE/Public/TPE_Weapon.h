@@ -91,5 +91,5 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = true))
 		float AttackDamage = 30.0f;
 
-	TMap<TWeakObjectPtr<AActor>, bool> AlreadyAttackList;
+	TMap<TWeakObjectPtr<AActor>, TPair<bool, FTimerHandle>> AlreadyAttackList;
 };

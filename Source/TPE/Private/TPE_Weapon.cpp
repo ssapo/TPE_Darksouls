@@ -58,7 +58,10 @@ void ATPE_Weapon::ResetAttackList()
 {
 	for (auto& e : AlreadyAttackList)
 	{
-		e.Value = false;
+		auto& Pair = e.Value;
+
+		Pair.Key = false;
+		GetWorld()->GetTimerManager().ClearTimer(Pair.Value);
 	}
 }
 
@@ -66,7 +69,7 @@ void ATPE_Weapon::BeginTrail()
 {
 	if (false == WeaponEffect) 
 	{ 
-		TPE_PRINT(FColor::Blue, TEXT("WeaponEffect is nullptr"));
+		TPE_PRINT(TEXT("WeaponEffect is nullptr"));
 		return; 
 	}
 
@@ -77,7 +80,7 @@ void ATPE_Weapon::EndTrail()
 {
 	if (false == WeaponEffect) 
 	{
-		TPE_PRINT(FColor::Blue, TEXT("WeaponEffect is nullptr"));
+		TPE_PRINT(TEXT("WeaponEffect is nullptr"));
 		return;
 	}
 
@@ -104,10 +107,12 @@ void ATPE_Weapon::OverlapBegin_Implementation(UPrimitiveComponent * OverlappedCo
 		{
 			if (!WeaponOwner->IsPlayerControlled() == !OtherTPECharacter->IsPlayerControlled()) { return; }
 
-			if (false == AlreadyAttackList.FindOrAdd(OtherActor))
+			auto& Finder = AlreadyAttackList.FindOrAdd(OtherActor);
+			if (false == Finder.Key)
 			{
+				TPE_PRINT_CS(FColor::Green, 1.0f, TEXT("%s Damage: %f"), *OtherComp->GetName(), AttackDamage);
 				OtherTPECharacter->TakeDamage(AttackDamage, FDamageEvent(), WeaponOwner->GetController(), this);
-				AlreadyAttackList[OtherActor] = true;
+				Finder.Key = true;
 			}
 		}
 	}
@@ -115,10 +120,11 @@ void ATPE_Weapon::OverlapBegin_Implementation(UPrimitiveComponent * OverlappedCo
 	{
 		if (false == OtherActor->bCanBeDamaged) { return; }
 
-		if (false == AlreadyAttackList.FindOrAdd(OtherActor))
+		auto& Finder = AlreadyAttackList.FindOrAdd(OtherActor);
+		if (false == Finder.Key)
 		{
 			OtherActor->TakeDamage(AttackDamage, FDamageEvent(), WeaponOwner->GetController(), this);
-			AlreadyAttackList[OtherActor] = true;
+			Finder.Key = true;
 		}
 	}
 }
@@ -132,22 +138,24 @@ void ATPE_Weapon::OverlapEnd_Implementation(UPrimitiveComponent * OverlappedComp
 		{
 			if (!WeaponOwner->IsPlayerControlled() == !OtherTPECharacter->IsPlayerControlled()) { return; }
 
-			if (true == AlreadyAttackList.FindOrAdd(OtherActor))
+			auto& Finder = AlreadyAttackList.FindOrAdd(OtherActor);
+			if (true == Finder.Key)
 			{
-				FTimerHandle UnusedHandle;
-				GetWorld()->GetTimerManager().SetTimer(UnusedHandle, [=]() {
-					AlreadyAttackList[OtherActor] = false;
+				GetWorld()->GetTimerManager().SetTimer(Finder.Value, [=, &Finder]() {
+					GetWorld()->GetTimerManager().ClearTimer(Finder.Value);
+					Finder.Key = false;
 					}, AttackDelayTime, false);
 			}
 		}
 	}
 	else if (OtherActor->IsA(ATPE_Actor::StaticClass()) && !OtherActor->IsA(ATPE_Weapon::StaticClass()))
 	{
-		if (true == AlreadyAttackList.FindOrAdd(OtherActor))
+		auto& Finder = AlreadyAttackList.FindOrAdd(OtherActor);
+		if (true == Finder.Key)
 		{
-			FTimerHandle UnusedHandle;
-			GetWorld()->GetTimerManager().SetTimer(UnusedHandle, [=]() {
-				AlreadyAttackList[OtherActor] = false;
+			GetWorld()->GetTimerManager().SetTimer(Finder.Value, [=, &Finder]() {
+				GetWorld()->GetTimerManager().ClearTimer(Finder.Value);
+				Finder.Key = false;
 				}, AttackDelayTime, false);
 		}
 	}
