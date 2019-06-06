@@ -16,7 +16,6 @@ void ATPE_Weapon::BeginPlay()
 	Super::BeginPlay();
 
 	WeaponCollision->OnComponentBeginOverlap.AddDynamic(this, &ATPE_Weapon::OverlapBegin);
-	WeaponCollision->OnComponentEndOverlap.AddDynamic(this, &ATPE_Weapon::OverlapEnd);
 }
 
 void ATPE_Weapon::SetWeaponOwner(ATPE_Character* NewWaeponOwner)
@@ -59,7 +58,6 @@ void ATPE_Weapon::ResetAttackList()
 	for (auto& e : AlreadyAttackList)
 	{
 		auto& Pair = e.Value;
-
 		Pair.Key = false;
 		GetWorld()->GetTimerManager().ClearTimer(Pair.Value);
 	}
@@ -98,7 +96,7 @@ void ATPE_Weapon::InitWeapon(UMeshComponent* NewWeaponBody, UPrimitiveComponent*
 	WeaponEffect = NewWeaponEffect;
 }
 
-void ATPE_Weapon::OverlapBegin_Implementation(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
+void ATPE_Weapon::OverlapBegin_Implementation(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (OtherActor->IsA(ATPE_Character::StaticClass()) && WeaponOwner != OtherActor)
 	{
@@ -107,10 +105,10 @@ void ATPE_Weapon::OverlapBegin_Implementation(UPrimitiveComponent * OverlappedCo
 		{
 			if (!WeaponOwner->IsPlayerControlled() == !OtherTPECharacter->IsPlayerControlled()) { return; }
 
-			auto& Finder = AlreadyAttackList.FindOrAdd(OtherActor);
+			auto key = OtherActor->GetName();
+			auto& Finder = AlreadyAttackList.FindOrAdd(key);
 			if (false == Finder.Key)
 			{
-				TPE_PRINT_CS(FColor::Green, 1.0f, TEXT("%s Damage: %f"), *OtherComp->GetName(), AttackDamage);
 				OtherTPECharacter->TakeDamage(AttackDamage, FDamageEvent(), WeaponOwner->GetController(), this);
 				Finder.Key = true;
 			}
@@ -120,7 +118,8 @@ void ATPE_Weapon::OverlapBegin_Implementation(UPrimitiveComponent * OverlappedCo
 	{
 		if (false == OtherActor->bCanBeDamaged) { return; }
 
-		auto& Finder = AlreadyAttackList.FindOrAdd(OtherActor);
+		auto key = OtherActor->GetName();
+		auto& Finder = AlreadyAttackList.FindOrAdd(key);
 		if (false == Finder.Key)
 		{
 			OtherActor->TakeDamage(AttackDamage, FDamageEvent(), WeaponOwner->GetController(), this);
@@ -129,7 +128,8 @@ void ATPE_Weapon::OverlapBegin_Implementation(UPrimitiveComponent * OverlappedCo
 	}
 }
 
-void ATPE_Weapon::OverlapEnd_Implementation(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex)
+
+void ATPE_Weapon::OverlapEnd_Implementation(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 	if (OtherActor->IsA(ATPE_Character::StaticClass()) && WeaponOwner != OtherActor)
 	{
@@ -138,11 +138,12 @@ void ATPE_Weapon::OverlapEnd_Implementation(UPrimitiveComponent * OverlappedComp
 		{
 			if (!WeaponOwner->IsPlayerControlled() == !OtherTPECharacter->IsPlayerControlled()) { return; }
 
-			auto& Finder = AlreadyAttackList.FindOrAdd(OtherActor);
+			auto key = OtherActor->GetName();
+			auto& Finder = AlreadyAttackList.FindOrAdd(key);
 			if (true == Finder.Key)
 			{
+				GetWorld()->GetTimerManager().ClearTimer(Finder.Value);
 				GetWorld()->GetTimerManager().SetTimer(Finder.Value, [=, &Finder]() {
-					GetWorld()->GetTimerManager().ClearTimer(Finder.Value);
 					Finder.Key = false;
 					}, AttackDelayTime, false);
 			}
@@ -150,16 +151,14 @@ void ATPE_Weapon::OverlapEnd_Implementation(UPrimitiveComponent * OverlappedComp
 	}
 	else if (OtherActor->IsA(ATPE_Actor::StaticClass()) && !OtherActor->IsA(ATPE_Weapon::StaticClass()))
 	{
-		auto& Finder = AlreadyAttackList.FindOrAdd(OtherActor);
+		auto key = OtherActor->GetName();
+		auto& Finder = AlreadyAttackList.FindOrAdd(key);
 		if (true == Finder.Key)
 		{
+			GetWorld()->GetTimerManager().ClearTimer(Finder.Value);
 			GetWorld()->GetTimerManager().SetTimer(Finder.Value, [=, &Finder]() {
-				GetWorld()->GetTimerManager().ClearTimer(Finder.Value);
 				Finder.Key = false;
 				}, AttackDelayTime, false);
 		}
 	}
-
 }
-
-
