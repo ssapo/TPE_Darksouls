@@ -43,10 +43,10 @@ public:
 		void EndTrail();
 
 	UFUNCTION(BlueprintCallable, Category = "Weapon|Attack")
-		void SetCollisionOn();
+		void SetAttackStateOn();
 
 	UFUNCTION(BlueprintCallable, Category = "Weapon|Attack")
-		void SetCollisionOff();
+		void SetAttackStateOff();
 
 	UFUNCTION(BlueprintCallable, Category = "Weapon|Attack")
 		void ResetAttackList();

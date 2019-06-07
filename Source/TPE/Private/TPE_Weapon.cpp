@@ -16,6 +16,7 @@ void ATPE_Weapon::BeginPlay()
 	Super::BeginPlay();
 
 	WeaponCollision->OnComponentBeginOverlap.AddDynamic(this, &ATPE_Weapon::OverlapBegin);
+	WeaponCollision->OnComponentEndOverlap.AddDynamic(this, &ATPE_Weapon::OverlapEnd);
 }
 
 void ATPE_Weapon::SetWeaponOwner(ATPE_Character* NewWaeponOwner)
@@ -30,23 +31,23 @@ ATPE_Character* ATPE_Weapon::GetWeaponOwner() const
 
 void ATPE_Weapon::Attack()
 {
-	SetCollisionOn();
+	SetAttackStateOn();
 }
 
 void ATPE_Weapon::AttackEnd()
 {
-	SetCollisionOff();
+	SetAttackStateOff();
 	ResetAttackList();
 }
 
-void ATPE_Weapon::SetCollisionOn()
+void ATPE_Weapon::SetAttackStateOn()
 {
 	if (nullptr == WeaponCollision) { return; }
 	
 	WeaponCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 }
 
-void ATPE_Weapon::SetCollisionOff()
+void ATPE_Weapon::SetAttackStateOff()
 {
 	if (nullptr == WeaponCollision) { return; }
 
@@ -127,7 +128,6 @@ void ATPE_Weapon::OverlapBegin_Implementation(UPrimitiveComponent* OverlappedCom
 		}
 	}
 }
-
 
 void ATPE_Weapon::OverlapEnd_Implementation(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
