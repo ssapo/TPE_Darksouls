@@ -16,7 +16,7 @@ ATPE_AIController::ATPE_AIController()
 	static ConstructorHelpers::FObjectFinder<UBlackboardData> BBOject(TEXT("/Game/TPE/AI/BB_TPE_Character.BB_TPE_Character"));
 	if (BBOject.Succeeded()) { BBAsset = BBOject.Object; }
 
-	static ConstructorHelpers::FObjectFinder<UBehaviorTree> BTObject(TEXT("/Game/TPE/AI/BT_TPE_Character.BT_TPE_Character"));
+	static ConstructorHelpers::FObjectFinder<UBehaviorTree> BTObject(TEXT("/Game/TPE/AI/BT_TPE_Spider.BT_TPE_Spider"));
 	if (BTObject.Succeeded()) { BTAsset = BTObject.Object; }
 }
 

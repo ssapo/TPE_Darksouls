@@ -71,7 +71,6 @@ void ATPE_Character::OnAttackMontageEnded(UAnimMontage * Montage, bool bInterrup
 	OnAttackEnd.Clear();
 }
 
-// Called when the game starts or when spawned
 void ATPE_Character::BeginPlay()
 {
 	Super::BeginPlay();
