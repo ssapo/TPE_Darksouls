@@ -8,8 +8,9 @@
 
 UBTService_Detect::UBTService_Detect()
 {
-	NodeName = TEXT("DETECT");
+	NodeName = TEXT("Detect to Target");
 	Interval = 1.0f;
+	RandomDeviation = 0.1f;
 }
 
 void UBTService_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
