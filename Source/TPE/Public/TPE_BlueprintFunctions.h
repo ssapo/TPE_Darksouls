@@ -35,6 +35,4 @@ public:
 
 	UFUNCTION(BlueprintPure, BlueprintCallable, Category = "Library|Transform")
 		static FTransform GetTransformIdentity();
-
-
 };
